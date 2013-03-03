@@ -26,3 +26,26 @@ Use Cases
 3. View and print Form
   a. Full page view of form.
 
+
+Search Query
+============
+
+```
+
+
+SELECT
+r.name, s.name, p.name, p.city, f.title
+FROM
+reasons as r, services as s, places as p, forms as f
+WHERE
+f.reason_id = r.id AND f.place_id = p.id AND f.service_id = s.id
+AND (
+  r.name ILIKE '%asses%' 
+  OR s.name ILIKE '%asses%' 
+  OR p.name ILIKE '%asses%' 
+  OR p.city ILIKE '%asses%'
+  OR f.title ILIKE '%asses%'
+)
+
+
+```

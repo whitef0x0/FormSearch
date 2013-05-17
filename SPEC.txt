@@ -26,6 +26,39 @@ Use Cases
 3. View and print Form
   a. Full page view of form.
 
+DB Schema
+=========
+
+CREATE TABLE places (
+  name varchar(255),
+  city varchar(255),
+  id bigserial primary key 
+);
+
+CREATE TABLE reasons (
+  name varchar(255),
+  id bigserial primary key 
+)
+
+CREATE TABLE forms (
+  title varchar(255),
+  reason_id integer ,
+  place_id integer ,
+  is_pediatric boolean,
+  id bigserial primary key 
+);
+
+DB Fixture
+==========
+(order matters!)
+
+INSERT INTO reasons (name) VALUES ('Cardiology');
+INSERT INTO places (name, city) VALUES ('North Shore Heart Group, North Vancouver');
+INSERT INTO forms (title, is_pediatric) VALUES ('Out-Patient Cardiology Refferal','t');
+
+
+
+
 
 Search Query
 ============
@@ -34,18 +67,10 @@ Search Query
 
 
 SELECT
-r.name, s.name, p.name, p.city, f.title
+r.name, p.name, p.city, f.title
 FROM
-reasons as r, services as s, places as p, forms as f
+reasons as r, places as p, forms as f
 WHERE
-f.reason_id = r.id AND f.place_id = p.id AND f.service_id = s.id
-AND (
-  r.name ILIKE '%asses%' 
-  OR s.name ILIKE '%asses%' 
-  OR p.name ILIKE '%asses%' 
-  OR p.city ILIKE '%asses%'
-  OR f.title ILIKE '%asses%'
-)
+f.reason_id = r.id AND f.place_id = p.id
 
-
-```
+'''

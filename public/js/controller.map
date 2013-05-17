@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "controller.js",
+  "sourceRoot": "",
+  "sources": [
+    "controller.coffee"
+  ],
+  "names": [],
+  "mappings": ";;AAAA;CAAA,KAAA,yBAAA;CAAA;CAAA,CAAA,CAAW,CAAA,EAAX,WAAW;;CAAX,CACA,CAAW,GAAA,CAAA,CAAX,EAAqB;;CADrB,CAGA,CACC,IADD;CACC,CAAU,EAAT,GAAA;CAJF,GAAA;;CAAA,CAOA,CAAA,IAAsB,EAAC,KAAvB;CACU,EAAR,IAAO,IAAP;CADF,EAAsB;;CAPtB,CAUA,CAAO,CAAP,GAAO,CAAA;;CAVP,CAWA,EAAA,MAAA;CAXA"
+}

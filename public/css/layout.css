@@ -1,0 +1,28 @@
+    body {
+      padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+
+    }
+    #omnibox {
+      border:1px solid #97B5D2;
+      color:#25313C;
+      width: 900px ;
+      height: 90px ;
+      font: 75px 'Lucida Grande';
+      
+      margin:0;
+      outline:0 none;
+      padding:7px;
+      margin-top: 125px
+    }
+    .centered-content{
+      text-align:center;
+    }
+    #results{
+      list-style-type: none;
+      text-align: left;
+      font: 20px 'Lucida Grande';
+      padding: 10px;
+    }
+
+block content(ng-view)
+  .centered-content

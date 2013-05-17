@@ -1,36 +1,76 @@
-
 #
 # * GET home page.
 # 
-#Temporary until DB is set up
 
-forms = [
-	{
-		title: "Children's Hospital Hearing Form"
-		place: "Children's Hospital",
-		location: 'Vancouver',
-		type: 'Audiology',
-		body: 'sample 1'
-	},
-	{
-		title: "KMC Austism Form",
-		place: "KMC",
-		location: 'Burnaby',
-		type: 'Autism Screening',
-		body: 'sample 2'
-	}
-]
+models = require("../models")
 
-exports.index = (req, res) ->
- 	res.render "layout",
-    	title: "Form Search"
 
-exports.results = (req, res) ->
+templates = 
+  "login": 
+    "inputs": [
+      {
+        "label": "Password", 
+        "name": "Password", 
+        "id": "password", 
+        "type": "text"
+      },
+      {
+        "label": "Username", 
+        "name": "Username", 
+        "id": "username", 
+        "type": "text"
+      }
+    ]
+ 
+  "signup": 
+    "inputs": [
+      {
+        "name": "Password", 
+        "id": "password", 
+        "type": "text"
+      },
+      {
+        "name": "Username", 
+        "id": "username", 
+        "type": "text"
+      },
+      {
+        "name": "Email", 
+        "id": "email", 
+        "type": "text"
+      },
+      {
+        "name": "ToS", 
+        "id": "tos", 
+        "type": "checkbox"
+      }
+    ]
 
-	res.contentType "json" 
-	result = forms.map((p) ->
-		if p != p.body
-			p
-	)
-	res.json(result)
 
+
+exports.login = (req, res) ->
+  res.render "/partials/login",
+    searchbox: 'true'
+#    res.send(JSON.stringify(templates.login))
+###
+
+exports.results = (req, res) ->	
+
+  res.contentType "json" 
+  models.Search req.query.term, (data) ->		  
+    console.log "DATA OUTPUT IS:"
+    #console.log data
+    res.json(data)
+
+exports.upload = (req, res) ->
+  res.render
+    res.contentType "json"
+
+    ###
+    res.send(
+      '<form action="/upload" enctype="multipart/form-data" method="post">'+
+      '<input type="text" name="title"><br>'+
+      '<input type="file" name="upload" multiple="multiple"><br>'+
+      '<input type="submit" value="Upload">'+
+      '</form>')
+    ###

@@ -11,25 +11,9 @@
 
   client.connect();
 
-  exports.Search = function(term, callback) {
+  exports.Search = function(callback) {
     var query, results;
-    query = client.query("SELECT r.name, s.name, p.name, p.city, f.title FROM reasons as r, services as s, places as p, forms as f");
-    /*  
-    r.name, s.name, p.name, p.city, f.title
-    FROM
-    reasons as r, services as s, places as p, forms as f
-    WHERE
-    f.reason_id = r.id AND f.place_id = p.id AND f.service_id = s.id
-    AND (
-      r.name ILIKE '%#{term}%'
-      OR s.name ILIKE '%#{term}%'
-      OR p.name ILIKE '%#{term}%'
-      OR p.city ILIKE '%#{term}%'
-      OR f.title ILIKE '%#{term}%'
-    )
-    """
-    */
-
+    query = client.query('SELECT r.name, p.name, p.city, f.title\nFROM\nreasons as r, places as p, forms as f\nWHERE\nf.reason_id = r.id AND f.place_id = p.id');
     results = [];
     query.on("row", function(row) {
       results.push(row);

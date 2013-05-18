@@ -1,7 +1,7 @@
-
 ###
 Module dependencies.
 ###
+models = require("./models")
 express = require("express")
 routes = require("./routes")
 http = require("http")
@@ -39,11 +39,13 @@ app.configure "development", ->
 ###
 HTTPS Routing controls
 ###
+
 app.get "/", (req, res) ->
   res.redirect "/index.html"
 
 app.get "/api/results", (req, res)->
-
+  models.Search (results) ->
+    res.send results
 
 app.get "/api/upload", routes.upload
 #app.get "/login", routes.https_raise

@@ -7,24 +7,14 @@ client.connect()
 
 
 
-exports.Search = (term, callback) ->
-  ##if client.connection._events  then client.connect()
-  query = client.query """SELECT r.name, t.name, p.name, p.city, f.title FROM reasons as r, types as t, places as p, forms as f"""
-  ###  
-  r.name, t.name, p.name, p.city, f.title
-  FROM
-  reasons as r, types as t, places as p, forms as f
-  WHERE
-  f.reason_id = r.id AND f.place_id = p.id AND f.service_id = s.id
-  AND (
-    r.name ILIKE '%#{term}%'
-    OR t.name ILIKE '%#{term}%'
-    OR p.name ILIKE '%#{term}%'
-    OR p.city ILIKE '%#{term}%'
-    OR f.title ILIKE '%#{term}%'
-  )
-  """
-  ###
+exports.Search = ( callback) ->
+  #if client.connection._events  then client.connect()
+  query = client.query '''SELECT r.name, p.name, p.city, f.title
+    FROM
+    reasons as r, places as p, forms as f
+    WHERE
+    f.reason_id = r.id AND f.place_id = p.id
+    '''
   results = []
   
   #can stream row results back 1 at a time

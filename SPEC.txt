@@ -38,14 +38,15 @@ CREATE TABLE places (
 CREATE TABLE reasons (
   name varchar(255),
   id bigserial primary key 
-)
+);
 
 CREATE TABLE forms (
   title varchar(255),
   reason_id integer ,
   place_id integer ,
   is_pediatric boolean,
-  id bigserial primary key 
+  id bigserial primary key,
+  filename varchar(255)
 );
 
 DB Fixture
@@ -53,10 +54,12 @@ DB Fixture
 (order matters!)
 
 INSERT INTO reasons (name) VALUES ('Cardiology');
-INSERT INTO places (name, city) VALUES ('North Shore Heart Group, North Vancouver');
-INSERT INTO forms (title, is_pediatric) VALUES ('Out-Patient Cardiology Refferal','t');
+INSERT INTO places (name, city) VALUES ('North Shore Heart Group', 'North Vancouver');
+INSERT INTO forms (title, is_pediatric, reason_id, place_id) VALUES ('Out-Patient Cardiology Refferal','t',1,1 );
 
-
+INSERT INTO reasons (name) VALUES ('Cardiology');
+INSERT INTO places (name, city) VALUES ('North Heart Group', 'North Vancouver');
+INSERT INTO forms (title, is_pediatric, reason_id, place_id) VALUES ('Out-Patient Cardiology Refferal','t',2,2 );
 
 
 
@@ -64,8 +67,6 @@ Search Query
 ============
 
 ```
-
-
 SELECT
 r.name, p.name, p.city, f.title
 FROM

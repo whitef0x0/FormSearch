@@ -13,8 +13,7 @@ exports.Upload = (callback) ->
 
 exports.Search = (callback) ->
   
-  query = client.query '''SELECT r.name, p.name, p.city, f.title
-    FROM
+  query = client.query '''SELECT r.name, p.name, p.city, f.title FROM
     reasons as r, places as p, forms as f
     WHERE
     f.reason_id = r.id AND f.place_id = p.id
@@ -30,6 +29,6 @@ exports.Search = (callback) ->
   #fired after last row is emitted
   query.on "end", ->
     callback(results)
-    client.end()
+    #client.end()
   
 

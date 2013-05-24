@@ -30,6 +30,7 @@
             <li><a href="#about">About</a></li>
 
             <li><a href="#contact">Contact</a></li>
+            <li><div id="upload">Add a Form</div></li>
           </ul>
         </div>
       </div>
@@ -38,9 +39,7 @@
   
 
   <div class = "container" > 
-    <div id = "upload" > 
-      
-    </div>
+
 
     <div id = "search">
       <input type = "text" id="omnibox" ng-model="search"/>  
@@ -56,7 +55,7 @@
         <li>
           {{name}}
           <p>{{location}}</p>
-          <a href="."+{{thumb}}>IMAGE</href>
+          <a href="."+{{filenames}}>IMAGE</href>
         </li>
         {{/each}}
       </ul>

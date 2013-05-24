@@ -5,11 +5,19 @@ String.prototype.trim = -> @replace /^\s+|\s+$/g, ''
 
 results = {}
 
+$("#upload").click ->
+ 
+  $.get "/upload", (data) ->
+    console.log("got here") 
+    $("#search").hide()
+    console.log(data)
+    $(".container").html(data)
+    
 
 $("#omnibox").keyup ->
   terms = $(@).val().trim().split(" ")
   out_results = []
-  out_results.thumb = result.filename
+ 
   for result in results
     result.score = 0
     for term in terms

@@ -25,6 +25,7 @@ app.configure ->
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.use app.router
+  app.use "view engine", "jade"
   app.use express.static(path.join(__dirname, "public"))
 
 app.configure "development", ->
@@ -45,6 +46,7 @@ app.get "/api/results", (req, res)->
   models.Search (results) ->
     res.send results
 
+
 app.get "/api/upload", (req, res)->
   fs.readFile req.files.displayForm.path, (err, data) ->
     newPath = __dirname + "/uploads/"
@@ -60,19 +62,9 @@ app.get "/api/upload", (req, res)->
       models.Upload(form) ->
         res.redirect "back"
 
-app.get "/upload", (req, res)->
- res.render "/upload",
-    res.contentType "json"
-    res.send(
-      '<form action="/api/upload" enctype="multipart/form-data" method="post">'+
-      '<input type="text" name="institution">'+
-      '<input type="drop" name="city">'+
-      '<input type="text" name="title"><br>'+
-      '<input type="file" name="upload" multiple="multiple"><br>'+
-      '<input(type="file", name="displayForm")/><br>'+
-      '<input type="submit" value="Upload">'+
-      '</form>')
+app.get "/upload", (req, res)->  
 
+  res.send '<form action="/api/upload" enctype="multipart/form-data" method="post"><input type="text" name="institution"><input type="drop" name="city"><input type="text" name="title"><br><input type="file" name="upload" multiple="multiple"><br><input(type="file", name="displayForm")/><br><input type="submit" value="Upload"></form>'
 
 http.createServer(app).listen app.get("port"),"0.0.0.0", ->
   console.log "Express server listening on port " + app.get("port")

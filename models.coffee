@@ -29,6 +29,6 @@ exports.Search = (callback) ->
   #fired after last row is emitted
   query.on "end", ->
     callback(results)
-    #client.end()
+    client.end()
   
 

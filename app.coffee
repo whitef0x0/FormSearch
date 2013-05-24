@@ -20,31 +20,25 @@ app = express()
 
 app.configure ->
   app.set "port", process.env.PORT or 3001
+  app.set "views", __dirname + "/views"
+  app.set "view engine", "jade" 
   app.use express.favicon()
   app.use express.logger("dev")
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.use app.router
-  app.use "view engine", "jade"
   app.use express.static(path.join(__dirname, "public"))
 
 app.configure "development", ->
   app.use express.errorHandler()
-
-
-# https = app.createServer(app).listen app.get(443), ->
-# console.log "Express SSL server listening on port " + https.get("port")
-
 ###
   HTTPS Routing controls
 ###
+console.log(routes.layout)
+app.get "/", routes.layout
+app.get "/upload", routes.upload 
 
-app.get "/", (req, res) ->
-  res.redirect "/index.html"
-
-app.get "/api/results", (req, res)->
-  models.Search (results) ->
-    res.send results
+app.get "/api/results", routes.results
 
 
 app.get "/api/upload", (req, res)->
@@ -62,9 +56,6 @@ app.get "/api/upload", (req, res)->
       models.Upload(form) ->
         res.redirect "back"
 
-app.get "/upload", (req, res)->  
-
-  res.send '<form action="/api/upload" enctype="multipart/form-data" method="post"><input type="text" name="institution"><input type="drop" name="city"><input type="text" name="title"><br><input type="file" name="upload" multiple="multiple"><br><input(type="file", name="displayForm")/><br><input type="submit" value="Upload"></form>'
 
 http.createServer(app).listen app.get("port"),"0.0.0.0", ->
   console.log "Express server listening on port " + app.get("port")

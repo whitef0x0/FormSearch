@@ -6,13 +6,10 @@ String.prototype.trim = -> @replace /^\s+|\s+$/g, ''
 results = {}
 
 $("#upload").click ->
- 
   $.get "/upload", (data) ->
-    console.log("got here") 
     $("#search").hide()
     console.log(data)
     $(".container").html(data)
-    
 
 $("#omnibox").keyup ->
   terms = $(@).val().trim().split(" ")
@@ -39,12 +36,9 @@ $("#omnibox").keyup ->
   context = 
     results: out_results
 
-  console.log context.results
-
   html = template(context)
+
   $(".results").html(html)
 
-
-$.get '/api/results', (rsp)->
-
-  results = rsp
+  $.get '/api/results', (rsp)->
+    results = rsp

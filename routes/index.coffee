@@ -44,24 +44,15 @@ models = require("../models")
           "type": "checkbox"
         }
       ]
-###
-  exports.login = (req, res) ->
+
+  exports.Login = (req, res) ->
     res.render "/login",
+###
+exports.layout = (req, res) ->
+  res.render "layout"
+exports.results = (req, res) ->	
+  models.Search (results) ->		  
+    res.send results
 
-  exports.results = (req, res) ->	
-    res.contentType "json" 
-    models.Search (data) ->		  
-      console.log "DATA OUTPUT IS:"
-      #console.log data
-      res.json(data)
-
-  exports.upload = (req, res) ->
-    res.render "/upload",
-      ###
-      res.send(
-        '<form action="/upload" enctype="multipart/form-data" method="post">'+
-        '<input type="text" name="title"><br>'+
-        '<input type="file" name="upload" multiple="multiple"><br>'+
-        '<input type="submit" value="Upload">'+
-        '</form>')
-      ###
+exports.upload = (req, res) ->
+  res.render "upload"

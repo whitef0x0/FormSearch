@@ -39,3 +39,8 @@ $("#omnibox").keyup ->
 $.get '/api/results', (rsp)->
 
   results = rsp
+
+
+$.get '/api/upload', (rsp)->
+
+  results = rsp

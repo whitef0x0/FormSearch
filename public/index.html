@@ -35,14 +35,21 @@
       </div>
     </div>
   </div><!--Layout container-->
+  
 
   <div class = "container" > 
+    <div id = "upload" > 
+      <form(action="/api/upload", method="post", enctype="multipart/form-data")>
+        <input(type="file", name="displayForm")/>
+      </form>
+    </div>
 
-    <input type = "text" id="omnibox" ng-model="search"/>  
-    <div class="results">
+    <div id = "search">
+      <input type = "text" id="omnibox" ng-model="search"/>  
+      <div class="results">
+      </div>
     </div>
   </div>
-
   <script src="/js/jquery.min.js"></script>
   <script src="/js/handlebars.js"></script>
   <script id="entry-template" type="text/x-handlebars-template">
@@ -51,6 +58,7 @@
         <li>
           {{name}}
           <p>{{location}}</p>
+          {{thumb}}
         </li>
         {{/each}}
       </ul>

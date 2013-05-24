@@ -9,6 +9,7 @@ results = {}
 $("#omnibox").keyup ->
   terms = $(@).val().trim().split(" ")
   out_results = []
+  out_results.thumb = result.filename
   for result in results
     result.score = 0
     for term in terms
@@ -37,10 +38,5 @@ $("#omnibox").keyup ->
 
 
 $.get '/api/results', (rsp)->
-
-  results = rsp
-
-
-$.get '/api/upload', (rsp)->
 
   results = rsp

@@ -39,9 +39,7 @@
 
   <div class = "container" > 
     <div id = "upload" > 
-      <form(action="/api/upload", method="post", enctype="multipart/form-data")>
-        <input(type="file", name="displayForm")/>
-      </form>
+      
     </div>
 
     <div id = "search">
@@ -58,7 +56,7 @@
         <li>
           {{name}}
           <p>{{location}}</p>
-          {{thumb}}
+          <a href="."+{{thumb}}>IMAGE</href>
         </li>
         {{/each}}
       </ul>

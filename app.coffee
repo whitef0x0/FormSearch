@@ -49,7 +49,7 @@ app.get "/api/upload", (req, res)->
   fs.readFile req.files.displayForm.path, (err, data) ->
     newPath = __dirname + "/uploads/"
 
-    form.name = newPath.replace "/uploads/",""
+    form.name = newPath #.replace "/uploads/",""
     form.title = req.body.title
     form.is_ped = req.body.city
     form.location.city = req.body.city
@@ -57,14 +57,16 @@ app.get "/api/upload", (req, res)->
     form.reason = req.body.diagnosis
 
     fs.writeFile newPath, data, (err) ->
-      #models.Upload(form) ->
-      res.redirect "back"
+      models.Upload(form) ->
+        res.redirect "back"
 
 app.get "/upload", (req, res)->
  res.render "/upload",
     res.contentType "json"
     res.send(
       '<form action="/api/upload" enctype="multipart/form-data" method="post">'+
+      '<input type="text" name="institution">'+
+      '<input type="drop" name="city">'+
       '<input type="text" name="title"><br>'+
       '<input type="file" name="upload" multiple="multiple"><br>'+
       '<input(type="file", name="displayForm")/><br>'+

@@ -49,10 +49,9 @@ models = require("../models")
     res.render "/login",
 ###
 exports.layout = (req, res) ->
-  res.render "layout"
+  res.render "search"
 exports.results = (req, res) ->	
   models.Search (results) ->		  
     res.send results
-
 exports.upload = (req, res) ->
   res.render "upload"

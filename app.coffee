@@ -6,16 +6,7 @@ http = require("http")
 path = require("path")
 https = require("https")      # module for https
 fs =    require("fs")         # required to read certs and keys
-###
-  opts = {
-      key:    fs.readFileSync("ssl/funkmod.key"),
-      cert:   fs.readFileSync("ssl/funkmod.crt"),
-      ca:     fs.readFileSync("ssl/funkmod.crt"),
-      requestCert:        true,
-      rejectUnauthorized: true,
-      passphrase: "password"
-  }
-###
+
 app = express()
 
 app.configure ->
@@ -28,7 +19,7 @@ app.configure ->
   app.use express.methodOverride()
   app.use app.router
   app.use express.static(path.join(__dirname, "public"))
-
+  #app.use express.static(path.join(__dirname + 'upload'))
 app.configure "development", ->
   app.use express.errorHandler()
 ###
@@ -39,7 +30,6 @@ app.get "/", routes.layout
 app.get "/upload", routes.upload 
 
 app.get "/api/results", routes.results
-
 
 app.get "/api/upload", (req, res)->
   fs.readFile req.files.displayForm.path, (err, data) ->

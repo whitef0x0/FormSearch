@@ -16,31 +16,32 @@ head
     .navbar.navbar-inverse.navbar-fixed-top
       .navbar-inner
         .container
-          a.brand(href='#') Form Search
+          a.brand(href='') Form Search
           .nav-collapse.collapse
             ul.nav
-              li.active
-                a(href='#') Search
+              li
+                a(href='/') Search
               li
                 a(href='upload') Add a Form
 
       //
         Layout container
     .container
-      #search
-        input#omnibox(type='text')
-        .results
-    block content
+      block content
 
     script(src='js/jquery.min.js')
     script(src='js/handlebars.js')    
     //
     script(id="entry-template", type="text/x-handlebars-template")
-      ul
+
+      ul.unstyled.lead
         {{#each results}}
+
         li
           {{name}}
-          {{location}}
-          //a href="."+{{filename}} IMAGE 
+        li  
+          {{city}}
+
+          a( src="./upload/1.pdf") link
         {{/each}}
     script(src='/js/controller.js')

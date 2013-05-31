@@ -32,21 +32,20 @@ DB Schema
 CREATE TABLE places (
   name varchar(255),
   city varchar(255),
-  pid bigserial primary key
+  id bigserial primary key
 );
 
 CREATE TABLE reasons (
   name varchar(255),
-  rid bigserial primary key
+  id bigserial primary key
 );
 CREATE TABLE forms (
   title varchar(255),
   reason_id integer,
   filename varchar(255),
-  place_id integer ,
+  place_id integer,
   is_pediatric boolean,
-  id bigserial primary key,
-  file_id integer
+  id bigserial primary key
 ); 
 
 DB Fixture
@@ -55,20 +54,18 @@ DB Fixture
 
 INSERT INTO reasons (name) VALUES ('Cardiology');
 INSERT INTO places (name, city) VALUES ('North Shore Heart Group', 'North Vancouver');
-INSERT INTO forms (title, is_pediatric, reason_id, place_id) VALUES ('Out-Patient Cardiology Refferal','t',1,1 );
+INSERT INTO forms (title, is_pediatric, reason_id, place_id) VALUES ('Out-Patient Cardiology Referral','f',1,1 );
 
-INSERT INTO reasons (name) VALUES ('Cardiology')
-INSERT INTO places (name, city) VALUES ('North Heart Group', 'North Vancouver')
-INSERT INTO forms (title, is_pediatric) VALUES ('Out-Patient Cardiology Refferal','t');
-
-
+INSERT INTO reasons (name) VALUES ('OsteoArthritis');
+INSERT INTO places (name, city) VALUES ('Vancouver Coastal Health', 'Vancouver');
+INSERT INTO forms (title, is_pediatric, reason_id, place_id) VALUES ('OASIS Program Referral Form','f',2,2);
 
 Search Query
 ============
 
 ```
 SELECT
-r.name, p.name, p.city, f.title
+r.name, p.name, p.city, f.title, f.filename, f.is_pediatric
 FROM
 reasons as r, places as p, forms as f
 WHERE
@@ -83,3 +80,89 @@ INSERT INTO places (name, city) VALUES ('{#file.location.name}', '{#file.locatio
 INSERT INTO forms (title, is_pediatric) VALUES ('{#file.title}','{#file.is_ped}');
 ```
 ### HINT: Look at http://stackoverflow.com/questions/6560447/can-i-use-return-value-of-insert-returning-in-in-another-insert or RETURNING (from INSERT statement) for more deets
+
+Nginx Conf (static files) 
+===============================
+
+  nginx.conf
+
+    user www-data;
+    worker_processes 4;
+    pid /var/run/nginx.pid;
+
+    events
+    {
+    worker_connections 1024;
+    # multi_accept on;
+    }
+
+    http
+    {
+    ##
+    # Basic Settings
+    ##
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+    # server_tokens off;
+    # server_names_hash_bucket_size 64;
+    # server_name_in_redirect off;
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    # Default webpage
+    index index.php index.html index.htm;
+
+    ##
+    # Logging Settings
+    ##
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+
+    ##
+    # Gzip Settings
+    ##
+    gzip on;
+    gzip_disable "msie6";
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 2;
+    gzip_buffers 16 8k;
+    gzip_http_version 1.1;
+    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+    ##
+    # Virtual Host Configs
+    ##
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-enabled/*;
+
+    }
+
+  sites-availabe/default
+
+    server
+    {
+        listen        8000;
+        server_name   localhost;
+
+        access_log /var/www/example.com/logs/access.log;
+        error_log /var/www/example.com/logs/error.log;
+
+        location /static/
+        {
+                root /user/home/chmod/apps/kmc_forms/upload/;
+        }
+
+
+        # Deny all attempts to access hidden files such as .htaccess, .htpasswd
+        location ~ /\.
+        {
+                deny all;
+                access_log off;
+                log_not_found off;
+        }
+    }

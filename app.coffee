@@ -30,21 +30,22 @@ console.log(routes.layout)
 app.get "/", routes.layout
 app.get "/upload", routes.upload 
 app.get "/api/results", routes.results
-
+app.get "/api/places", routes.places
 app.post "/api/upload", (req, res)->
+  console.log(req.body)
 
   form =
     title: req.body.title
-    location: req.body.city
+    pid: req.body.city
     name: req.body.institution
-    reason: req.body.diagnosis
+    rid: req.body.reason
   if req.body.ped_t
     form.is_ped = 't'
-  else req.body.ped_f
+  else if req.body.ped_f
     form.is_ped = 'f' 
-  console.log form.title+" |"+form.is_ped
-  models.Upload (form) ->
-    
+
+  models.Upload(form) 
+  res.redirect "back" 
   ###
   fs.readFile req.files.displayForm.path, (err, data) ->
     newPath = __dirname + "/uploads/"

@@ -6,10 +6,13 @@ head
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(name='description', content='')
     meta(name='author', content='')
+
     link(href='bootstrap/css/bootstrap.css', rel='stylesheet', type='text/css')
     link(href='bootstrap/css/bootstrap-responsive.css', rel='stylesheet', type='text/css')
     link(href='css/layout.css', rel='stylesheet', type='text/css')
     link(rel='icon', type = "image/png",href='images/favicon.png')
+
+
   body
     //
       Top navbar
@@ -24,25 +27,11 @@ head
               li
                 a(href='upload') Add a Form
 
-      //
-        Layout container
+    //
+      Layout container
+    script(src='js/jquery.min.js')
+    script(src='js/handlebars.js')
     .container
       block content
-
-    script(src='js/jquery.min.js')
-    script(src='js/handlebars.js')    
-    //
-    script(id="entry-template", type="text/x-handlebars-template")
-
-      ul.unstyled.lead
-        {{#each results}}
-        br
-        li
-         a(href="uploads/{{filename}}") {{title}}
-        li
-          Institution {{name}}
-        li  
-          Location {{city}}
-          
-        {{/each}}
+    
     script(src='/js/controller.js')

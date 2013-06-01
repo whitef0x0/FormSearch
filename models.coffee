@@ -12,22 +12,23 @@ exports.Reason = (callback) ->
   #can stream row results back 1 at a time
   query.on "row", (row) ->
     reasons.push row
-    console.log reasons
 
   query = client.query '''SELECT p.name, p.city, p.pid FROM places as p'''
   places = []
   #can stream row results back 1 at a time
   query.on "row", (row) ->
     places.push row
-    console.log places
 
   #fired after last row is emitted
   query.on "end", ->
     callback(reasons,places)
 
-exports.Upload = (file) ->
-
-  query = client.query "INSERT INTO forms (title, is_pediatric) VALUES (#{file.title},#{file.is_ped});"
+exports.Upload = (form) ->
+  
+  query = client.query """INSERT INTO forms (title, is_pediatric, place_id, reason_id) 
+    VALUES ('#{form.title}', '#{form.is_ped}', '#{form.pid}', '#{form.rid}');"""
+ 
+  query.on "end", ->
 exports.Search = (callback) ->
   
   query = client.query '''SELECT r.name, p.name, p.city, f.title, f.filename, f.is_pediatric
@@ -47,6 +48,6 @@ exports.Search = (callback) ->
   #fired after last row is emitted
   query.on "end", ->
     callback(results)
-    #client.end()
+
   
 

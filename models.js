@@ -15,23 +15,22 @@
     query = client.query('SELECT r.name, r.rid FROM reasons as r');
     reasons = [];
     query.on("row", function(row) {
-      reasons.push(row);
-      return console.log(reasons);
+      return reasons.push(row);
     });
     query = client.query('SELECT p.name, p.city, p.pid FROM places as p');
     places = [];
     query.on("row", function(row) {
-      places.push(row);
-      return console.log(places);
+      return places.push(row);
     });
     return query.on("end", function() {
       return callback(reasons, places);
     });
   };
 
-  exports.Upload = function(file) {
+  exports.Upload = function(form) {
     var query;
-    return query = client.query("INSERT INTO forms (title, is_pediatric) VALUES (" + file.title + "," + file.is_ped + ");");
+    query = client.query("INSERT INTO forms (title, is_pediatric, place_id, reason_id) \nVALUES ('" + form.title + "', '" + form.is_ped + "', '" + form.pid + "', '" + form.rid + "');");
+    return query.on("end", function() {});
   };
 
   exports.Search = function(callback) {

@@ -18,13 +18,11 @@ block content
            Select Basic
       
       .control-group
-        label.control-label(for='selectbasic') Select a Reason
+        label.control-label(for='selectbasic') Diagnosis/Reason
         .controls
-          select#selectbasic.input-large(id="reason")
-
-            // Handlebars template for mulitple reason input
+          select#selectbasic.input-large(name="reason")
             for reason in reasons
-              option!=reason.name
+              option(value=reason.rid)!=reason.name
 
         //
            Multiple Checkboxes 
@@ -32,43 +30,44 @@ block content
           label.control-label(for='is_ped') Is it Pediatric?
           .controls
             label.checkbox(for='Pediatric-0', required='')
-              input#Pediatric-0(type='checkbox', name='is_ped', value='t')
+              input#Pediatric-0(type='checkbox', name='ped_t', value='t')
               | Yes
             label.checkbox(for='Pediatric-1')
-              input#Pediatric-1(type='checkbox', name='is_ped', value='f')
+              input#Pediatric-1(type='checkbox', name='ped_f', value='t')
               | No
       //
            Select Basic
       
       .control-group
-        label.control-label(for='selectbasic') Select the Institution
+        label.control-label(for='selectbasic') City
         .controls
-          select#selectbasic.input-large(id="reason")
-
+          select#selectbasic.input-large(name="city", id="city")
+            option(value='null')
             for place in places
-              option!=place.name
-                    
-
-       //
+              option(value=place.pid)!=place.city
+      //
            Select Basic
-      
-      .control-group
-        label.control-label(for='selectbasic') Select a City
-        .controls
-          select#selectbasic.input-large(id="reason")
 
-            for place in places
-              option!=place.city
-                    
-        //
-           File Button 
-        .control-group
-          label.control-label(for='upload') Upload Form
-          .controls
-            input#upload.input-file(type='file')
-        //
-           Button 
-        .control-group
-          label.control-label(for='singlebutton')
-          .controls
-            button#singlebutton.btn.btn-primary(type ='submit', name='singlebutton') Submit Form
+      .control-group
+        label.control-label(for='selectbasic') Institution
+        .controls
+          select#selectbasic.input-large(id = "institution", name="institution")
+          
+          // Handlebars template for institutions
+          script(id="template", type="text/x-handlebars-template")
+            {{#each places}}
+            option(value='{{pid}}')  {{name}}
+            {{/each}}
+            
+      //
+         File Button 
+      .control-group
+        label.control-label(for='upload') Upload Form
+        .controls
+          input#upload.input-file(type='file')
+      //
+         Button 
+      .control-group
+        label.control-label(for='singlebutton')
+        .controls
+          button#singlebutton.btn.btn-primary(type ='submit', name='singlebutton') Submit Form

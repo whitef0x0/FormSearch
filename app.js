@@ -48,21 +48,24 @@
 
   app.get("/api/results", routes.results);
 
+  app.get("/api/places", routes.places);
+
   app.post("/api/upload", function(req, res) {
     var form;
+    console.log(req.body);
     form = {
       title: req.body.title,
-      location: req.body.city,
+      pid: req.body.city,
       name: req.body.institution,
-      reason: req.body.diagnosis
+      rid: req.body.reason
     };
     if (req.body.ped_t) {
       form.is_ped = 't';
     } else if (req.body.ped_f) {
       form.is_ped = 'f';
     }
-    console.log(form.title + " |" + form.is_ped);
-    return models.Upload(function(form) {});
+    models.Upload(form);
+    return res.redirect("back");
     /*
       fs.readFile req.files.displayForm.path, (err, data) ->
         newPath = __dirname + "/uploads/"

@@ -75,10 +75,16 @@ f.reason_id = r.id AND f.place_id = p.id
 Upload Query
 ============
 ```
-INSERT INTO reasons (name) VALUES ({#file.reason}) AND
-INSERT INTO places (name, city) VALUES ('{#file.location.name}', '{#file.location.city}');
+INSERT INTO reasons (name) VALUES ('{#file.reason}') AND
+INSERT INTO places (name, city) VALUES ('{#file.name}', '{#file.city}');
 INSERT INTO forms (title, is_pediatric) VALUES ('{#file.title}','{#file.is_ped}');
 ```
+
+example 
+
+with rows as(INSERT INTO reasons (name) VALUES ('Asthma') RETURNING pid AND rid)
+    INSERT INTO places (name, city) VALUES ('KMC', 'Burnaby') RETURNING rid) AND
+    INSERT INTO forms (title, is_pediatric, reason_id, place_id) VALUES ('KMC Asthma Refferal','f', rid, pid);
 ### HINT: Look at http://stackoverflow.com/questions/6560447/can-i-use-return-value-of-insert-returning-in-in-another-insert or RETURNING (from INSERT statement) for more deets
 
 Nginx Conf (static files) 

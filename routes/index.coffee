@@ -54,4 +54,11 @@ exports.results = (req, res) ->
   models.Search (results) ->		  
     res.send results
 exports.upload = (req, res) ->
-  res.render "upload"
+  models.Reason (reasons, places) ->
+
+    res.render "upload", 
+      reasons: reasons
+      places: places
+    
+
+

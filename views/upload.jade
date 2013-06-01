@@ -2,7 +2,7 @@ extends layout
 
 block content
 
-  form.form-horizontal
+  form.form-horizontal(action='/api/upload', method='post',enctype='multipart/form-data')
     fieldset
         //
            Form Name 
@@ -14,68 +14,61 @@ block content
           .controls
             input#title.input-xlarge(name='title', type='text', placeholder='ex. KMC Asthma Refferal Form', required='')
             p.help-block title of form (look at top) 
-        //
-           Text input
-        .control-group
-          label.control-label(for='reason_name') Diagnosis/Reason
-          .controls
-            input#reason_name.input-medium(name='reason_name', type='text', placeholder='ex. asthma', required='')
-            p.help-block reason for referral
+       //
+           Select Basic
+      
+      .control-group
+        label.control-label(for='selectbasic') Select a Reason
+        .controls
+          select#selectbasic.input-large(id="reason")
+
+            // Handlebars template for mulitple reason input
+            for reason in reasons
+              option!=reason.name
+
         //
            Multiple Checkboxes 
         .control-group
-          label.control-label(for='Pediatric') Is it Pediatric?
+          label.control-label(for='is_ped') Is it Pediatric?
           .controls
             label.checkbox(for='Pediatric-0', required='')
-              input#Pediatric-0(type='checkbox', name='Pediatric', value='Yes')
+              input#Pediatric-0(type='checkbox', name='is_ped', value='t')
               | Yes
             label.checkbox(for='Pediatric-1')
-              input#Pediatric-1(type='checkbox', name='Pediatric', value='No')
+              input#Pediatric-1(type='checkbox', name='is_ped', value='f')
               | No
-        //
-           Text input
-        .control-group
-          label.control-label(for='place.name') Instiution Name
-          .controls
-            input#place.name.input-xlarge(name='place.name', type='text', placeholder='ex. St. Paul Hosptial', required='')
-            p.help-block No abbreviations or acronyms
-        //
-           Button Drop Down 
-        .control-group
-          label.control-label(for='city') Institution City
-          .controls
-            .input-append
-              input#city.input-large(name='city', placeholder='Choose a city', type='text', required='')
-              .btn-group
-                button.btn.dropdown-toggle(data-toggle='dropdown')
-                  | Cities
-                  span.caret
-                ul.dropdown-menu
-                  li
-                    a(href='#') Vancouver
-                  li
-                    a(href='#') Burnaby
-                  li
-                    a(href='#') West Vancouver
-                  li
-                    a(href='#') North Vancouver
-                  li
-                    a(href='#') Surrey
-                  li
-                    a(href='#') Richmond
-                  li
-                    a(href='#') Coquitlam
-                  li
-                    a(href='#') White Rock
+      //
+           Select Basic
+      
+      .control-group
+        label.control-label(for='selectbasic') Select the Institution
+        .controls
+          select#selectbasic.input-large(id="reason")
+
+            for place in places
+              option!=place.name
+                    
+
+       //
+           Select Basic
+      
+      .control-group
+        label.control-label(for='selectbasic') Select a City
+        .controls
+          select#selectbasic.input-large(id="reason")
+
+            for place in places
+              option!=place.city
+                    
         //
            File Button 
         .control-group
           label.control-label(for='upload') Upload Form
           .controls
-            input#upload.input-file(name='upload', type='file', , required='')
+            input#upload.input-file(type='file')
         //
            Button 
         .control-group
           label.control-label(for='singlebutton')
           .controls
-            button#singlebutton.btn.btn-primary(name='singlebutton') Submit Form
+            button#singlebutton.btn.btn-primary(type ='submit', name='singlebutton') Submit Form

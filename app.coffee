@@ -19,19 +19,33 @@ app.configure ->
   app.use express.methodOverride()
   app.use app.router
   app.use express.static(path.join(__dirname, "public"))
-  #app.use express.static(path.join(__dirname + 'upload'))
+  app.use express.static(__dirname + "/upload")
 app.configure "development", ->
   app.use express.errorHandler()
 ###
   HTTPS Routing controls
 ###
 console.log(routes.layout)
+
 app.get "/", routes.layout
 app.get "/upload", routes.upload 
-
 app.get "/api/results", routes.results
 
-app.get "/api/upload", (req, res)->
+app.post "/api/upload", (req, res)->
+
+  form =
+    title: req.body.title
+    location: req.body.city
+    name: req.body.institution
+    reason: req.body.diagnosis
+  if req.body.ped_t
+    form.is_ped = 't'
+  else req.body.ped_f
+    form.is_ped = 'f' 
+  console.log form.title+" |"+form.is_ped
+  models.Upload (form) ->
+    
+  ###
   fs.readFile req.files.displayForm.path, (err, data) ->
     newPath = __dirname + "/uploads/"
 
@@ -45,7 +59,7 @@ app.get "/api/upload", (req, res)->
     fs.writeFile newPath, data, (err) ->
       models.Upload(form) ->
         res.redirect "back"
-
+  ###
 
 http.createServer(app).listen app.get("port"),"0.0.0.0", ->
   console.log "Express server listening on port " + app.get("port")

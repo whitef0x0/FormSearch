@@ -9,7 +9,7 @@ head
     link(href='bootstrap/css/bootstrap.css', rel='stylesheet', type='text/css')
     link(href='bootstrap/css/bootstrap-responsive.css', rel='stylesheet', type='text/css')
     link(href='css/layout.css', rel='stylesheet', type='text/css')
-    link(rel='shortcut icon', href='/bootstrap/ico/favicon.png')
+    link(rel='icon', type = "image/png",href='images/favicon.png')
   body
     //
       Top navbar
@@ -36,12 +36,13 @@ head
 
       ul.unstyled.lead
         {{#each results}}
-
+        br
         li
-          {{name}}
+         a(href="uploads/{{filename}}") {{title}}
+        li
+          Institution {{name}}
         li  
-          {{city}}
-
-          a( src="./upload/1.pdf") link
+          Location {{city}}
+          
         {{/each}}
     script(src='/js/controller.js')

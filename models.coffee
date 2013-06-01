@@ -1,24 +1,40 @@
 pg = require("pg") #native libpq bindings = `var pg = require('pg').native`
-conString = "tcp://admin:halflife2@localhost/forms"
+conString = "tcp://admin:password@localhost/forms"
 client = new pg.Client(conString)
 client.connect()
 
 #queries are queued and executed one after another once the connection becomes available
 #if client.connection._events  then client.connect()
-exports.Upload = (callback) ->
+exports.Reason = (callback) ->
 
-  query = client.query '''with rows as(INSERT INTO reasons (name) VALUES ({#file.reason}) RETURNING pid AND
-    INSERT INTO places (name, city) VALUES ({#file.location.name}, {#file.location.city}) RETURNING rid);
-    INSERT INTO forms (title, is_pediatric, reason_id, place_id) VALUES ({#file.title},{#file.is_ped}, rid, pid);
-     '''
+  query = client.query '''SELECT r.name, r.rid FROM reasons as r'''
+  reasons = []
+  #can stream row results back 1 at a time
+  query.on "row", (row) ->
+    reasons.push row
+    console.log reasons
 
+  query = client.query '''SELECT p.name, p.city, p.pid FROM places as p'''
+  places = []
+  #can stream row results back 1 at a time
+  query.on "row", (row) ->
+    places.push row
+    console.log places
+
+  #fired after last row is emitted
+  query.on "end", ->
+    callback(reasons,places)
+
+exports.Upload = (file) ->
+
+  query = client.query "INSERT INTO forms (title, is_pediatric) VALUES (#{file.title},#{file.is_ped});"
 exports.Search = (callback) ->
   
   query = client.query '''SELECT r.name, p.name, p.city, f.title, f.filename, f.is_pediatric
     FROM
     reasons as r, places as p, forms as f
     WHERE
-    f.reason_id = r.id AND f.place_id = p.id
+    f.reason_id = r.rid AND f.place_id = p.pid
     '''
   results = []
   

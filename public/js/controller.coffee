@@ -1,15 +1,13 @@
-source   = $("#entry-template").html()
-template = Handlebars.compile(source)
+#Config for 'results' handlebarjs template 
+source_results = $("#result-template").html()
+template_results = Handlebars.compile(source_results)
+
+#Search term cleanup
 String.prototype.trim = -> @replace /^\s+|\s+$/g, '' 
 
 results = {}
 
-$("#upload").click ->
-  $.get "/upload", (data) ->
-    $("#search").hide()
-    console.log(data)
-    $(".container").html(data)
-
+#Search box ajax handling
 $("#omnibox").keyup (e) ->
   key = e.keyCode || e.which
   terms = $(@).val().trim().split(" ")
@@ -37,7 +35,7 @@ $("#omnibox").keyup (e) ->
   context = 
     results: out_results
 
-  html = template(context)
+  html = template_results(context)
 
   if (out_results+' ' == ' ' && $("#omnibox").val() != '') && terms[0].length >= 2
     $(".results").html('<br> <i> <p class = "lead"> The search term(s) "'+terms+'" did not yield any results. <br> Check your spelling and try again </p></i>')
@@ -48,3 +46,7 @@ $("#omnibox").keyup (e) ->
 
   $.get '/api/results',(rsp)->
     results = rsp
+
+#Handlebarjs Reasons template 
+
+

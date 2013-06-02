@@ -5,24 +5,33 @@
     #omnibox {
       border:1px solid #97B5D2;
       color:#25313C;
-      width: 900px ;
-      height: 90px ;
-      font: 75px 'Lucida Grande';
-      
       margin:0;
       outline:0 none;
       padding:7px;
-      margin-top: 125px
+      margin-top: 125px;
+      margin-bottom: 30px;
+
+    }
+    #omnibox.large {
+      font: 75px 'Lucida Grande';
+      width: 940px ;
+      height: 90px ;
+    }
+     #omnibox.small {
+      font: 25px 'Lucida Grande';
+      width: 940px;
+      height: 30px;
     }
     .centered-content{
       text-align:center;
     }
-    #results{
+    .menu {
+      display:none;
+    }
+    .results{
       list-style-type: none;
       text-align: left;
-      font: 20px 'Lucida Grande';
-      padding: 10px;
+      font: 15px 'Lucida Grande';
+      padding: 50px;
+      padding-top: 3px;
     }
-
-block content(ng-view)
-  .centered-content

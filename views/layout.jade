@@ -1,37 +1,54 @@
-html(lang='en', ng-app='kmc', xmlns='http://www.w3.org/1999/xhtml')
+html(lang='en', xmlns='http://www.w3.org/1999/xhtml')
 head
-    meta(name='generator', content='HTML Tidy for Linux/x86 (vers 25 March 2009), see www.w3.org')
     meta(charset='utf-8')
     title Form Search
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(href= "bootstrap/css/bootstrap-responsive.css", rel='stylesheet', type='text/css')
     meta(name='description', content='')
     meta(name='author', content='')
+    
+    link(href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css', rel='stylesheet', type='text/css')        
+    link(href= "bootstrap/css/bootstrap.css", rel='stylesheet', type='text/css')
+    link(href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css", rel='stylesheet', type='text/css')
+    link(href='/css/layout.css', rel='stylesheet', type='text/css')
+    link(rel='shortcut icon', href='images/favicon.ico')
 
-    link(href='bootstrap/css/bootstrap.css', rel='stylesheet', type='text/css')
-    link(href='bootstrap/css/bootstrap-responsive.css', rel='stylesheet', type='text/css')
-    link(href='css/layout.css', rel='stylesheet', type='text/css')
-    link(rel='icon', type = "image/png",href='images/favicon.png')
-
+    //jQueryUI CDN
+    script(src='//code.jquery.com/jquery-1.9.1.js')
+    script(src='//code.jquery.com/ui/1.10.3/jquery-ui.js')
+    //PDFObject js plugin
+    script(src='/js/pdfobject.js')
+    //jQuery printPage plugin
+    script(src='/js/printPage.js')
 
   body
     //
       Top navbar
     .navbar.navbar-inverse.navbar-fixed-top
       .navbar-inner
-        .container
-          a.brand(href='') Form Search
+        .container-fluid
+
+          a.brand(href='/') Form Search  
+            i.icon-user-md.icon-large
           .nav-collapse.collapse
             ul.nav
               li
                 a(href='/') Search
               li
                 a(href='upload') Add a Form
+              li
+
+                a(href='settings') 
+                  i.icon-cog  
+                  | Settings
+                  
+
 
     //
       Layout container
-    script(src='js/jquery.min.js')
-    script(src='js/handlebars.js')
+    //script(src='/js/jquery.min.js')
+    script(src='/js/handlebars.js')
     .container
       block content
-    
+
     script(src='/js/controller.js')

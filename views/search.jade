@@ -2,15 +2,17 @@ extends layout
 
 block content
   #search
-    input#omnibox(type='text', placeholder = 'Search here')
-    .results
-      script(id="template", type="text/x-handlebars-template")
-        ul.unstyled.lead
-          {{#each results}}
-          li
-           a(href="uploads/{{filename}}") {{title}}
-          li
-            Institution {{name}}
-          li  
-            Location {{city}}              
-          {{/each}}
+    input#omnibox.large(type='text', placeholder = 'Search here')
+  .results
+  script(id="template", type="text/x-handlebars-template")
+    dl
+      {{#each results}}
+      dt
+        u 
+          h3 
+            a(href="view:{{title}}") {{title}}
+      dd
+        p.text-warning Institution: {{name}}
+      dd  
+        p.text-warning City: {{city}}
+      {{/each}}

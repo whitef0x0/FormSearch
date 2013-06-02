@@ -11,35 +11,48 @@
   client.connect();
 
   exports.Reason = function(callback) {
-    var places, query, reasons;
-    query = client.query('SELECT r.name, r.rid FROM reasons as r');
+    var cities, places, query, reasons;
+    query = client.query('SELECT r.name, r.id FROM reasons as r');
     reasons = [];
     query.on("row", function(row) {
       return reasons.push(row);
     });
-    query = client.query('SELECT p.name, p.city, p.pid FROM places as p');
+    query = client.query('SELECT p.name, p.city_id, p.id FROM places as p');
     places = [];
     query.on("row", function(row) {
       return places.push(row);
     });
+    query = client.query('SELECT c.c_name, c.id FROM cities as c');
+    cities = [];
+    query.on("row", function(row) {
+      return cities.push(row);
+    });
     return query.on("end", function() {
-      return callback(reasons, places);
+      return callback(reasons, places, cities);
     });
   };
 
-  exports.Upload = function(form) {
+  exports.AddCity = function(new_city) {
     var query;
-    query = client.query("INSERT INTO forms (title, is_pediatric, place_id, reason_id) \nVALUES ('" + form.title + "', '" + form.is_ped + "', '" + form.pid + "', '" + form.rid + "');");
-    return query.on("end", function() {});
+    return query = client.query("INSERT INTO cities (c_name) \nVALUES ('" + new_city + "');");
+  };
+
+  exports.AddInst = function(new_place) {
+    var query;
+    return query = client.query("INSERT INTO places (name, city_id) \nVALUES ('" + new_place.name + "', " + new_place.city_id + ");");
+  };
+
+  exports.Upload = function(new_form) {
+    var query;
+    return query = client.query("INSERT INTO forms (title, place_id, reason_id) \nVALUES ('" + new_form.title + "', " + new_form.id + ", " + new_form.id + ");");
   };
 
   exports.Search = function(callback) {
     var query, results;
-    query = client.query('SELECT r.name, p.name, p.city, f.title, f.filename, f.is_pediatric\nFROM\nreasons as r, places as p, forms as f\nWHERE\nf.reason_id = r.rid AND f.place_id = p.pid');
+    query = client.query('SELECT r.name, p.name, c.c_name, f.title, f.filename, f.is_pediatric\nFROM\nreasons as r, places as p, forms as f, cities as c\nWHERE\nf.reason_id = r.id AND f.place_id = p.id AND p.city_id = c.id;');
     results = [];
     query.on("row", function(row) {
-      results.push(row);
-      return console.log(results);
+      return results.push(row);
     });
     return query.on("end", function() {
       return callback(results);

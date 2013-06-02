@@ -1,5 +1,3 @@
-
-
 Personas
 ========
 
@@ -31,10 +29,13 @@ DB Schema
 
 CREATE TABLE places (
   name varchar(255),
+  city_id integer,
+  id bigserial primary key
+);
+CREATE TABLE cities (
   city varchar(255),
   id bigserial primary key
 );
-
 CREATE TABLE reasons (
   name varchar(255),
   id bigserial primary key
@@ -53,11 +54,13 @@ DB Fixture
 (order matters!)
 
 INSERT INTO reasons (name) VALUES ('Cardiology');
-INSERT INTO places (name, city) VALUES ('North Shore Heart Group', 'North Vancouver');
+INSERT INTO places (name, city_id) VALUES ('North Shore Heart Group', 1);
+INSERT INTO cities (city) VALUES ('North Vancouver');
 INSERT INTO forms (title, is_pediatric, reason_id, place_id) VALUES ('Out-Patient Cardiology Referral','f',1,1 );
 
 INSERT INTO reasons (name) VALUES ('OsteoArthritis');
-INSERT INTO places (name, city) VALUES ('Vancouver Coastal Health', 'Vancouver');
+INSERT INTO places (name, city_id) VALUES ('Vancouver Coastal Health', 2);
+INSERT INTO cities (city) VALUES ('Vancouver');
 INSERT INTO forms (title, is_pediatric, reason_id, place_id) VALUES ('OASIS Program Referral Form','f',2,2);
 
 Search Query
@@ -65,18 +68,18 @@ Search Query
 
 ```
 SELECT
-r.name, p.name, p.city, f.title, f.filename, f.is_pediatric
+r.name, p.name, c.city, f.title, f.filename, f.is_pediatric
 FROM
-reasons as r, places as p, forms as f
+reasons as r, places as p, forms as f, c as cities
 WHERE
-f.reason_id = r.id AND f.place_id = p.id
+f.reason_id = r.id AND f.place_id = p.id AND p.city_id = c.id
 ```
 
 Upload Query
 ============
 ```
 INSERT INTO reasons (name) VALUES ('{#file.reason}') AND
-INSERT INTO places (name, city) VALUES ('{#file.name}', '{#file.city}');
+INSERT INTO places (name, city_id) VALUES ('{#file.name}', {#file.city});
 INSERT INTO forms (title, is_pediatric) VALUES ('{#file.title}','{#file.is_ped}');
 ```
 

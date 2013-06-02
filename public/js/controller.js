@@ -2,86 +2,96 @@
 (function() {
   var places, results, source, template;
 
-  source = $("#template").html();
+  if ($("#template").length !== 0) {
+    source = $("#template").html();
+    template = Handlebars.compile(source);
+    String.prototype.trim = function() {
+      return this.replace(/^\s+|\s+$/g, '');
+    };
+    results = {};
+    places = {};
+    $.get('/api/places', function(rsp) {
+      return places = rsp;
+    });
+    $("#city").change(function() {
+      var context, curr_id, html, out_places, place, _i, _len;
+      curr_id = $("#city").find(":selected").val();
+      out_places = [];
+      for (_i = 0, _len = places.length; _i < _len; _i++) {
+        place = places[_i];
+        if (place.city_id + '' === curr_id) {
+          out_places.push(place);
+        }
+      }
+      context = {
+        places: out_places
+      };
+      console.log(places);
+      html = template(context);
+      return $("#institution").html(html);
+    }).trigger("change");
+    $("#omnibox").keyup(function(e) {
+      var context, html, key, out_results, result, term, terms, _i, _j, _len, _len1;
+      key = e.keyCode || e.which;
+      terms = $(this).val().trim().split(" ");
+      out_results = [];
+      for (_i = 0, _len = results.length; _i < _len; _i++) {
+        result = results[_i];
+        result.score = 0;
+        for (_j = 0, _len1 = terms.length; _j < _len1; _j++) {
+          term = terms[_j];
+          if (!term) {
+            continue;
+          }
+          term = term.toLowerCase();
+          if (result.name.toLowerCase().indexOf(term) > -1) {
+            result.score += 1;
+          }
+          if (result.c_name.toLowerCase().indexOf(term) > -1) {
+            result.score += 1;
+          }
+          if (result.title.toLowerCase().indexOf(term) > -1) {
+            result.score += 1;
+          }
+        }
+        if (result.score > 0) {
+          out_results.push(result);
+        }
+      }
+      out_results.sort(function(a, b) {
+        return b.score - a.score;
+      });
+      context = {
+        results: out_results
+      };
+      html = template(context);
+      if ((out_results + ' ' === ' ' && $("#omnibox").val() !== '') && !terms[0] >= 1) {
+        $(".results").show();
+        $(".results").css("background-color", "white");
+        $(".results").html('<br> <i> <p class = "lead"> The search term(s) "' + terms + '" did not yield any results. <br> Check your spelling and try again </p></i>');
+      } else if (terms[0].length <= 1) {
+        $(".results").hide();
+        $("#omnibox").switchClass("small", "large", 100);
+      } else {
+        $("#omnibox").switchClass("large", "small", 80);
+        $(".results").show();
+        $(".results").css("background-color", "B1DCFE");
+        $(".results").html(html);
+      }
+      return $.get('/api/results', function(rsp) {
+        return results = rsp;
+      });
+    });
+  }
 
-  template = Handlebars.compile(source);
-
-  String.prototype.trim = function() {
-    return this.replace(/^\s+|\s+$/g, '');
-  };
-
-  results = {};
-
-  places = {};
-
-  $.get('/api/places', function(rsp) {
-    return places = rsp;
+  $("div.show.btn").click(function(e) {
+    var id;
+    id = e.target.id;
+    return $("#" + id + ".menu").toggle("fold");
   });
 
-  $("#city").change(function() {
-    var context, curr_city, html, out_places, place, _i, _len;
-    curr_city = $("#city").find(":selected").text();
-    out_places = [{}];
-    for (_i = 0, _len = places.length; _i < _len; _i++) {
-      place = places[_i];
-      console.log(place.city, curr_city);
-      if (place.city === curr_city) {
-        console.log(place);
-        out_places.push(place);
-      }
-    }
-    context = {
-      places: out_places
-    };
-    html = template(context);
-    console.log(html);
-    return $("#institution").html(html);
-  }).trigger("change");
-
-  $("#omnibox").keyup(function(e) {
-    var context, html, key, out_results, result, term, terms, _i, _j, _len, _len1;
-    key = e.keyCode || e.which;
-    terms = $(this).val().trim().split(" ");
-    out_results = [];
-    for (_i = 0, _len = results.length; _i < _len; _i++) {
-      result = results[_i];
-      result.score = 0;
-      for (_j = 0, _len1 = terms.length; _j < _len1; _j++) {
-        term = terms[_j];
-        if (!term) {
-          continue;
-        }
-        term = term.toLowerCase();
-        if (result.name.toLowerCase().indexOf(term) > -1) {
-          result.score += 1;
-        }
-        if (result.city.toLowerCase().indexOf(term) > -1) {
-          result.score += 1;
-        }
-        if (result.title.toLowerCase().indexOf(term) > -1) {
-          result.score += 1;
-        }
-      }
-      if (result.score > 0) {
-        out_results.push(result);
-      }
-    }
-    out_results.sort(function(a, b) {
-      return b.score - a.score;
-    });
-    context = {
-      results: out_results
-    };
-    html = template(context);
-    if ((out_results + ' ' === ' ' && $("#omnibox").val() !== '') && terms[0].length >= 2) {
-      $(".results").html('<br> <i> <p class = "lead"> The search term(s) "' + terms + '" did not yield any results. <br> Check your spelling and try again </p></i>');
-    } else {
-      $(".results").html(html);
-    }
-    return $.get('/api/results', function(rsp) {
-      console.log(rsp);
-      return results = rsp;
-    });
+  $(".print").printPage({
+    message: "Preparing document for printing"
   });
 
 }).call(this);

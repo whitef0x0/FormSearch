@@ -6,14 +6,15 @@ block content
     fieldset
         //
            Form Name 
-        legend Upload a Form
+        legend Upload a Form 
+          i.icon-cloud-upload.icon-large
         //
            Text input
         .control-group
           label.control-label(for='title') Form Title
           .controls
-            input#title.input-xlarge(name='title', type='text', placeholder='ex. KMC Asthma Refferal Form', required='')
-            p.help-block title of form (look at top) 
+            input#title.input-xlarge(name='title', type='text', placeholder='ex. KMC Asthma Referral Form', required='')
+            p.help-block look at top of form
        //
            Select Basic
       
@@ -26,48 +27,50 @@ block content
 
         //
            Multiple Checkboxes 
+
         .control-group
-          label.control-label(for='is_ped') Is it Pediatric?
-          .controls
-            label.checkbox(for='Pediatric-0', required='')
-              input#Pediatric-0(type='checkbox', name='ped_t', value='t')
-              | Yes
-            label.checkbox(for='Pediatric-1')
-              input#Pediatric-1(type='checkbox', name='ped_f', value='t')
-              | No
+          label.control-label(for='radios') Is it Pediatric?
+            .controls
+              label.radio(for='ped_t')
+                input#radios-0(type='radio', name='ped_t', value='t')
+                | Yes
+              label.radio(for='ped_f')
+                input#radios-1(type='radio', name='ped_f', value='t')
+                | No
       //
            Select Basic
       
       .control-group
-        label.control-label(for='selectbasic') City
+        label.control-label(for='city') City
         .controls
-          select#selectbasic.input-large(name="city", id="city")
-            option(value='null')
-            for place in places
-              option(value=place.pid)!=place.city
+          select#selectbasic.input-large(name="city", id="city", required='')
+            option(value='null') --Choose a city--
+            for city in cities
+              option(value=city.id)!=city.c_name
       //
            Select Basic
 
       .control-group
         label.control-label(for='selectbasic') Institution
         .controls
-          select#selectbasic.input-large(id = "institution", name="institution")
-          
-          // Handlebars template for institutions
-          script(id="template", type="text/x-handlebars-template")
-            {{#each places}}
-            option(value='{{pid}}')  {{name}}
-            {{/each}}
-            
+          select#selectbasic.input-large(id = "institution", name="institution", required='')
       //
          File Button 
       .control-group
-        label.control-label(for='upload') Upload Form
+        label.control-label(for='upload') Upload PDF
         .controls
-          input#upload.input-file(type='file')
+          input#upload.input-file(type='file', name='displayForm', required='')
       //
          Button 
       .control-group
         label.control-label(for='singlebutton')
         .controls
-          button#singlebutton.btn.btn-primary(type ='submit', name='singlebutton') Submit Form
+          button#singlebutton.btn.btn-primary(type ='submit', name='singlebutton') 
+            | Submit 
+            
+
+  // Handlebars template for institutions
+  script(id="template", type="text/x-handlebars-template")
+    {{#each places}}
+    option(value='{{id}}')  {{name}}
+    {{/each}}

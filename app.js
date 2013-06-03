@@ -65,10 +65,8 @@
     var form;
     console.log(req.body);
     form = {
-      filename: '',
       title: req.body.title,
-      pid: req.body.city,
-      inst: req.body.institution,
+      pid: req.body.institution,
       rid: req.body.reason,
       is_ped: ''
     };
@@ -79,7 +77,7 @@
     }
     return fs.readFile(req.files.displayForm.path, function(err, data) {
       var newPath;
-      form.filename = newPath = __dirname + "/static/" + req.body.title + ".pdf";
+      form.filename = newPath = __dirname + "/static/" + req.body.title.split(" ") + ".pdf";
       console.log(newPath);
       return fs.writeFile(newPath, data, function(err) {
         models.Upload(form);

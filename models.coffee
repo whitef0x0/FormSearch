@@ -33,27 +33,29 @@ exports.ViewForm = (title, callback) ->
     FROM
     reasons as r, places as p, forms as f, cities as c
     WHERE
-    f.reason_id = r.id AND f.place_id = p.id AND p.city_id = c.id;
-    AND WHERE f.title = '#{title}'
+    f.reason_id = r.id AND f.place_id = p.id AND p.city_id = c.id AND f.title = '#{title}';
     """
   query.on "row", (row) ->
     form.push 
-
+  console.log(title)
   query.on "end", ->
     callback(form)
 
 exports.DelForm
+
 exports.AddCity = (new_city) ->
   query = client.query """INSERT INTO cities (c_name) 
     VALUES ('#{new_city}');"""
-
+exports.AddReason = (new_reason) ->
+  query = client.query """INSERT INTO reasons (name) 
+    VALUES ('#{new_reason}');"""
 exports.AddInst = (new_place) ->
   query = client.query """INSERT INTO places (name, city_id) 
     VALUES ('#{new_place.name}', #{new_place.city_id});"""
 
 exports.Upload = (new_form) ->
-  query = client.query """INSERT INTO forms (title, place_id, reason_id) 
-    VALUES ('#{new_form.title}', #{new_form.id}, #{new_form.id});
+  query = client.query """INSERT INTO forms (title, is_pediatric, place_id, reason_id) 
+    VALUES ('#{new_form.title}', '#{new_form.rid}', #{new_form.pid}, #{new_form.rid});
     """
 
 exports.Search = (callback) ->

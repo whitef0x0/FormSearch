@@ -79,6 +79,7 @@ if $("#template").length != 0
 # /settings prefpane event triggers
 $("div.show.btn").click (e)->
   id = e.target.id
+  console.log(id)
   $("#"+id+".menu").toggle "fold"
 
 #

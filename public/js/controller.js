@@ -87,6 +87,7 @@
   $("div.show.btn").click(function(e) {
     var id;
     id = e.target.id;
+    console.log(id);
     return $("#" + id + ".menu").toggle("fold");
   });
 

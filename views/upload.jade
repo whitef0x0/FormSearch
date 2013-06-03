@@ -21,9 +21,10 @@ block content
       .control-group
         label.control-label(for='selectbasic') Diagnosis/Reason
         .controls
-          select#selectbasic.input-large(name="reason")
+          select#selectbasic.input-large(name="reason", id="reason")
+            option(value='null') --Choose a reason--
             for reason in reasons
-              option(value=reason.rid)!=reason.name
+              option(value=reason.id)!= reason.name
 
         //
            Multiple Checkboxes 
@@ -32,10 +33,10 @@ block content
           label.control-label(for='radios') Is it Pediatric?
             .controls
               label.radio(for='ped_t')
-                input#radios-0(type='radio', name='ped_t', value='t')
+                input#radios-0(type='radio', name='ped_t')
                 | Yes
               label.radio(for='ped_f')
-                input#radios-1(type='radio', name='ped_f', value='t')
+                input#radios-1(type='radio', name='ped_f')
                 | No
       //
            Select Basic
@@ -57,7 +58,7 @@ block content
       //
          File Button 
       .control-group
-        label.control-label(for='upload') Upload PDF
+        label.control-label(for='upload') Upload your PDF
         .controls
           input#upload.input-file(type='file', name='displayForm', required='')
       //

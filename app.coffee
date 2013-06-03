@@ -40,10 +40,8 @@ app.get "/api/places", routes.places
 app.post "/api/upload", (req, res)->
   console.log(req.body)
   form =
-    filename: ''
     title: req.body.title
-    pid: req.body.city
-    inst: req.body.institution
+    pid: req.body.institution
     rid: req.body.reason
     is_ped: ''
  
@@ -53,7 +51,7 @@ app.post "/api/upload", (req, res)->
     form.is_ped = 'f' 
   
   fs.readFile req.files.displayForm.path, (err, data) ->
-    form.filename = newPath = __dirname + "/static/"+req.body.title+".pdf"
+    form.filename = newPath = __dirname + "/static/"+req.body.title.split(" ")+".pdf"
     console.log(newPath)
 
     fs.writeFile newPath, data, (err) ->

@@ -32,9 +32,29 @@
     });
   };
 
+  exports.ViewForm = function(title, callback) {
+    var form, query;
+    form = [];
+    query = client.query("SELECT r.name, p.name, c.c_name, f.title, f.filename, f.is_pediatric\nFROM\nreasons as r, places as p, forms as f, cities as c\nWHERE\nf.reason_id = r.id AND f.place_id = p.id AND p.city_id = c.id AND f.title = '" + title + "';");
+    query.on("row", function(row) {
+      return form.push;
+    });
+    console.log(title);
+    return query.on("end", function() {
+      return callback(form);
+    });
+  };
+
+  exports.DelForm;
+
   exports.AddCity = function(new_city) {
     var query;
     return query = client.query("INSERT INTO cities (c_name) \nVALUES ('" + new_city + "');");
+  };
+
+  exports.AddReason = function(new_reason) {
+    var query;
+    return query = client.query("INSERT INTO reasons (name) \nVALUES ('" + new_reason + "');");
   };
 
   exports.AddInst = function(new_place) {
@@ -44,7 +64,7 @@
 
   exports.Upload = function(new_form) {
     var query;
-    return query = client.query("INSERT INTO forms (title, place_id, reason_id) \nVALUES ('" + new_form.title + "', " + new_form.id + ", " + new_form.id + ");");
+    return query = client.query("INSERT INTO forms (title, is_pediatric, place_id, reason_id) \nVALUES ('" + new_form.title + "', '" + new_form.rid + "', " + new_form.pid + ", " + new_form.rid + ");");
   };
 
   exports.Search = function(callback) {

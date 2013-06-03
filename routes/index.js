@@ -33,14 +33,19 @@
   };
 
   exports.view = function(req, res) {
-    var filename;
+    var doc, name;
     String.prototype.trim = function() {
       return this.replace(':', '');
     };
-    filename = req.params.id.trim();
-    console.log(filename);
+    name = req.params.id.trim();
+    doc = {};
+    models.ViewForm(name, doc)(function() {
+      var form;
+      return form = doc;
+    });
     return res.render("form", {
-      name: filename
+      name: name,
+      form: form
     });
   };
 
@@ -57,6 +62,9 @@
     if (req.body.new_city) {
       models.AddCity(req.body.new_city);
     }
+    if (req.body.new_reason) {
+      models.AddReason(req.body.new_reason);
+    }
     return res.redirect("back");
   };
 
@@ -68,6 +76,7 @@
 
   exports.results = function(req, res) {
     return models.Search(function(results) {
+      console.log(results);
       return res.send(results);
     });
   };

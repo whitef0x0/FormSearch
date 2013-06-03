@@ -22,6 +22,9 @@
       width: 940px;
       height: 30px;
     }
+    #modify {
+      display: none;
+    }
     .centered-content{
       text-align:center;
     }

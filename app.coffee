@@ -1,7 +1,8 @@
-#Module dependencies.
+#Module dependencies
 models = require("./models")
 express = require("express")
 routes = require("./routes")
+#utils = require("./utils")
 http = require("http")
 path = require("path")
 https = require("https")      # module for https
@@ -13,7 +14,7 @@ app.configure ->
   app.set "port", process.env.PORT or 3001
   app.set "views", __dirname + "/views"
   app.set "view engine", "jade" 
-  app.set 'view options',{layout:false}
+  app.set 'view options', {layout:false}
   app.use express.favicon()
   app.use express.logger("dev")
   app.use express.bodyParser()
@@ -26,7 +27,6 @@ app.configure "development", ->
 ###
   HTTPS Routing controls
 ###
-console.log(routes.layout)
 
 app.get "/", routes.layout
 app.get "/upload", routes.upload 
@@ -34,25 +34,28 @@ app.get "/success", routes.success
 app.get "/settings", routes.settings
 app.get "/view:id", routes.view
 
-app.post "/api/settings", routes.set
 app.get "/api/results", routes.results
 app.get "/api/places", routes.places
+app.get "/api/modify", routes.modify
+
+app.post "/api/settings", routes.set
 app.post "/api/upload", (req, res)->
-  console.log(req.body)
+  string = req.body.title+""
+  hash = string.hashCode()
   form =
     title: req.body.title
     pid: req.body.institution
     rid: req.body.reason
     is_ped: ''
- 
+    filename: hash
+  console.log(form.filename)
   if req.body.ped_t
     form.is_ped = 't'
   else if req.body.ped_f
     form.is_ped = 'f' 
   
   fs.readFile req.files.displayForm.path, (err, data) ->
-    form.filename = newPath = __dirname + "/static/"+req.body.title.split(" ")+".pdf"
-    console.log(newPath)
+    newPath = __dirname + "/static/"+hash+".pdf"
 
     fs.writeFile newPath, data, (err) ->
       models.Upload (form) 

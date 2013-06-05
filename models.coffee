@@ -27,21 +27,21 @@ exports.Reason = (callback) ->
   #fired after last row is emitted
   query.on "end", ->
     callback(reasons,places,cities)
-exports.ViewForm = (title, callback) ->
-  form = []
-  query = client.query """SELECT r.name, p.name, c.c_name, f.title, f.filename, f.is_pediatric
+
+exports.ViewForm = (name, callback) ->
+  forms = []
+  query = client.query """SELECT r.name AS reason, p.name AS place, c.c_name AS city, f.title, f.filename, f.is_pediatric
     FROM
     reasons as r, places as p, forms as f, cities as c
     WHERE
-    f.reason_id = r.id AND f.place_id = p.id AND p.city_id = c.id AND f.title = '#{title}';
+    f.reason_id = r.id AND f.place_id = p.id AND p.city_id = c.id AND f.filename =#{name};
     """
+  
   query.on "row", (row) ->
-    form.push 
-  console.log(title)
+    forms.push row
+  #console.log form
   query.on "end", ->
-    callback(form)
-
-exports.DelForm
+    callback(forms)
 
 exports.AddCity = (new_city) ->
   query = client.query """INSERT INTO cities (c_name) 
@@ -54,8 +54,9 @@ exports.AddInst = (new_place) ->
     VALUES ('#{new_place.name}', #{new_place.city_id});"""
 
 exports.Upload = (new_form) ->
-  query = client.query """INSERT INTO forms (title, is_pediatric, place_id, reason_id) 
-    VALUES ('#{new_form.title}', '#{new_form.rid}', #{new_form.pid}, #{new_form.rid});
+  query = client.query """INSERT INTO forms (title, is_pediatric, place_id, reason_id, filename) 
+    VALUES ('#{new_form.title}', '#{new_form.is_ped}', #{new_form.pid}, #{new_form.rid}, 
+    #{new_form.filename});
     """
 
 exports.Search = (callback) ->
@@ -74,6 +75,3 @@ exports.Search = (callback) ->
   #fired after last row is emitted
   query.on "end", ->
     callback(results)
-
-  
-

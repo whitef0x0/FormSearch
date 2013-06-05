@@ -1,11 +1,12 @@
 #
 # * GET home page.
 # 
-
+utils = require("../utils")
 models = require("../models")
 
 #Template Rendering
 exports.layout = (req, res) ->
+  strng = "hello there"
   res.render "search"
 exports.settings = (req, res) ->
   models.Reason (reasons, places, cities) ->
@@ -23,17 +24,19 @@ exports.success = (req,res) ->
 	res.render "success"    
 exports.view = (req,res) ->
   String.prototype.trim = -> @replace ':', '' 
-  name = req.params.id.trim()
-  doc = {}
-  models.ViewForm(name,doc) ->
-    form = doc
-  res.render "form",
-    name: name
-    form: form
-       
+  filename = req.params.id.trim()+""
+  models.ViewForm filename, (forms) ->
+    models.Reason (reasons, places) ->
+      res.render "form",
+        doc: forms
+        reasons: reasons
+        places: places
+         
 #AJAX handling
+exports.modify = (req, res) ->
+
+
 exports.set = (req, res) ->
-  console.log(req.body)
   place = 
     city_id: req.body.city
     name: req.body.new_inst
@@ -45,6 +48,5 @@ exports.places = (req, res) ->
   models.Reason (reasons,places) ->
     res.send places
 exports.results = (req, res) ->
-  models.Search (results) ->		
-    console.log(results)  
+  models.Search (results) ->		 
     res.send results

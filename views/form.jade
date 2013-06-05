@@ -1,0 +1,116 @@
+extends layout
+
+block content
+  .row
+    .span12
+      h1 Form: #{doc[0].title} 
+      u.text-info 
+        i
+          #detail.showmenu more details 
+            i.icon-chevron-right
+  #detail.menu.row
+    .row-fixed
+      em
+        .span3 Institution:
+        .span3 Location:
+        .span3 Reason/Diagnosis:
+        .span3 Pediatric:
+
+    .row-fixed.text-warning
+      b
+        .span3 #{doc[0].place}
+        .span3 #{doc[0].city}, BC
+        .span3 #{doc[0].reason}
+        .span3
+          if doc[0].is_pediatric
+            |Yes
+          else No
+  .row &nbsp;
+  .row-fixed 
+    .btn-group
+      a.btn.btn-primary.print(href="/static/#{doc[0].filename}.pdf") 
+        i.icon-print.icon-large
+        |  Print
+      a.btn.btn-primary(href="/static/#{doc[0].filename}.pdf") 
+        i.icon-save.icon-large
+        |   Save
+      div.btn.btn-danger
+        i.icon-remove.icon-large
+        |   Delete
+      div#modify.btn.btn-success.showmenu
+        i.icon-wrench.icon-large
+        |   Modify &nbsp;&nbsp;&nbsp;
+        i.icon-chevron-right
+  form#modify.menu
+    legend Modify Form
+
+
+    .control-group
+      label.control-label(for='change_name') Current Title: 
+        b
+          | #{doc[0].title}
+      .controls
+        .input-prepend  
+          span.add-on New Title
+          input#change_name.input-xlarge(form.filename='change_name', placeholder='placeholder', type='text') 
+            p.help Leave empty if you don't want to change
+    .control-group
+      label Currently 
+        if doc[0].is_pediatric
+          b is Pediatric (Yes)
+        else if !doc[0].pediatric
+          b is not Pediatric (No)
+      label.control-label(for='is_ped') Is it still Pediatric?
+      .controls
+        if doc[0].is_pediatric
+          label.radio(for='is_ped-0')
+            input#is_ped-0(type='radio', name='is_ped', value='Yes', checked='checked')
+            | Yes
+          label.radio(for='is_ped-1')
+            input#is_ped-1(type='radio', name='is_ped', value='No')
+            | No
+        else if !doc[0].pediatric
+          label.radio(for='is_ped-0')
+            input#is_ped-0(type='radio', name='is_ped', value='Yes')
+            | Yes
+          label.radio(for='is_ped-1')
+            input#is_ped-1(type='radio', name='is_ped', value='No', checked='checked')
+            | No
+
+    .control-group
+      label Current institution: 
+        b #{doc[0].place}
+      label.control-label(for='change_inst') Choose a new institution
+      .controls
+        select#change_inst.input-xlarge(name='change_inst')
+          for place in places
+            if place.name == doc.place
+              option(value=place.id, selected)!=place.name
+            else
+              option(value=place.id)!=place.name
+
+    .control-group
+      label Current reason: 
+        b #{doc[0].reason}
+      label.control-label(for='change_inst') Choose a new reason
+      .controls
+        select#change_inst.input-xlarge(name='change_inst')
+          for reason in reasons
+            if reason.name == doc.reason
+              option(value=reason.id, selected)!=reason.name
+            else
+              option(value=reason.id)!=reason.name
+
+    .control-group
+      label.control-label(for='singlebutton')
+      .controls
+        button#singlebutton.btn.btn-primary(type ='submit', name='singlebutton') 
+          | Save Changes  
+  .row-fluid#pdf
+    object(data="/static/#{doc[0].filename}.pdf", type='application/pdf', width='100%', height='100%')
+      p
+          | It appears you don't have a PDF plugin for this browser.
+          | No biggie... you can
+          a(href="/static/#{doc[0].filename}.pdf")
+            | click here to
+            | download the PDF file

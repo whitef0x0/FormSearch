@@ -1,3 +1,6 @@
+# Settings page ajax form handling
+
+
 if $("#template").length != 0 
       
   #Config for handlebar.js template
@@ -77,12 +80,13 @@ if $("#template").length != 0
       results = rsp
 
 # /settings prefpane event triggers
-$("div.show.btn").click (e)->
+$(".showmenu").click (e)->
   id = e.target.id
-  console.log(id)
   $("#"+id+".menu").toggle "fold"
+  $("#"+id+" > i.icon-chevron-right").toggleClass "icon-rotate-90" 
 
 #
 $(".print").printPage(
+  attr: "href"
   message:"Preparing document for printing"
   )

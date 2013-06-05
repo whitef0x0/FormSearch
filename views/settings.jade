@@ -1,0 +1,102 @@
+extends layout
+
+block content
+  .row
+    .span2
+
+  form.form-horizontal.settings(action='/api/settings', method='post',enctype='multipart/form-data')
+      fieldset
+          //
+             Form Name 
+          legend Settings 
+            i.icon-cog.icon-large
+          //
+             Button 
+          .control-group
+            label.control-label(for='singlebutton')
+            .controls
+              div#accnt.btn.btn-inverse.showmenu Manage Account    
+                i.icon-chevron-right
+          div#accnt.menu
+            
+            .control-group
+              label.control-label(for='email') Email
+              .controls
+                input#email.input-xlarge(name='email', type='text', placeholder='joe@example.com')
+                p.help-block this will be your username
+            //
+               Password input
+            .control-group
+              label.control-label(for='passwordinput') Password
+              .controls
+                input#passwordinput.input-xlarge(name='passwordinput', type='password', placeholder='')
+                p.help-block must be at least 7 characters long
+            //
+               Password input
+            .control-group
+              label.control-label(for='passwordinput')
+              .controls
+                input#passwordinput.input-xlarge(name='passwordinput', type='password', placeholder='repeat password')
+
+
+            
+          //
+             Button 
+          .control-group
+            label.control-label(for='singlebutton')
+            .controls
+              div#inst.btn.btn-info.showmenu Add Clinic/Hospital  
+                i.icon-chevron-right#inst
+
+          div#inst.menu
+
+            .control-group
+              label.control-label(for='new_inst') Institution Name
+              .controls
+                input#textinput.input-xlarge(name='new_inst', type='text', placeholder='e.g. Vancouver General Hospital')
+                p.help-block do not use any abbreviations 
+            
+            .control-group
+              label.control-label(for='city') City  
+              .controls
+                select#selectbasic.input-large(name='city', id = 'city')
+                  option(value="null") -- Choose a city --
+                  for city in cities
+                    option(value=city.id)!=city.c_name
+
+          //
+             Button 
+          .control-group
+            label.control-label(for='singlebutton')
+            .controls
+              div#city.btn.btn-info.showmenu Add City  
+                i.icon-chevron-right#city
+
+          div#city.menu
+            .control-group
+              label.control-label(for='new_city') City Name 
+              .controls
+                input#textinput.input-xlarge(name='new_city', type='text', placeholder='e.g. Vancouver')
+                p.help-block do not use any abbreviations 
+
+          //
+             Button 
+          .control-group
+            label.control-label(for='singlebutton')
+            .controls
+              div#reason.btn.btn-info.showmenu Add Reason  
+                i.icon-chevron-right#reason
+
+          div#reason.menu
+
+            
+            
+            .control-group
+              label.control-label(for='textinput') Reason Name
+              .controls
+                input#textinput.input-xlarge(name='new_reason', type='text', placeholder='e.g. osteoporosis')
+                
+          .control-group
+            label.control-label(for='singlebutton')
+            .controls
+              input#reason.btn.btn-success(type="submit") Save your settings

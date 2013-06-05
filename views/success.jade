@@ -1,0 +1,17 @@
+extends layout
+
+block content
+
+  form.form-horizontal
+    fieldset
+        //
+           Form Name 
+        legend File upload successful! 
+        //
+           Button (Double) 
+        .control-group
+          label.control-label(for='button1id') Do you want to upload another file?
+          .controls
+            a#button1id.btn.btn-success(href="/upload") Yes       
+            a#button2id.btn.btn-danger(href="/") No        
+

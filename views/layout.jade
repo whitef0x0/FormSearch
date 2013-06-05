@@ -1,47 +1,55 @@
 html(lang='en', xmlns='http://www.w3.org/1999/xhtml')
-head
-    meta(charset='utf-8')
-    title Form Search
-    meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(href= "bootstrap/css/bootstrap-responsive.css", rel='stylesheet', type='text/css')
-    meta(name='description', content='')
-    meta(name='author', content='')
-    
-    link(href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css', rel='stylesheet', type='text/css')        
-    link(href= "bootstrap/css/bootstrap.css", rel='stylesheet', type='text/css')
-    link(href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css", rel='stylesheet', type='text/css')
-    link(href='/css/layout.css', rel='stylesheet', type='text/css')
-    link(rel='shortcut icon', href='images/favicon.ico')
+  head
+      meta(charset='utf-8')
+      title Form Search
+      meta(name='viewport', content='width=device-width, initial-scale=1.0')
+      meta(name='description', content='')
+      meta(name='author', content='')
+      
+      link(href="//fonts.googleapis.com/css?family=Arvo", rel="stylesheet", type="text/css")
+      link(href="//fonts.googleapis.com/css?family=PT+Sans", rel="stylesheet", type="text/css")
 
-    //jQueryUI CDN
-    script(src='//code.jquery.com/jquery-1.9.1.js')
-    script(src='//code.jquery.com/ui/1.10.3/jquery-ui.js')
-    //PDFObject js plugin
-    script(src='/js/pdfobject.js')
-    //jQuery printPage plugin
-    script(src='/js/printPage.js')
+      link(href='/css/layout.css', rel='stylesheet', type='text/css')
+      link(href= "/bootstrap/css/bootstrapresponsive.css", rel='stylesheet', type='text/css')    
+      link(href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css', rel='stylesheet', type='text/css')        
+      link(href= "bootstrap/css/bootstrap.css", rel='stylesheet', type='text/css')
+      link(href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css", rel='stylesheet', type='text/css')
+      link(rel='shortcut icon', href='images/favicon.ico')
+
+      //jQuery & jQueryUI CDN
+      script(src='//code.jquery.com/jquery-1.9.1.js')
+      script(src='//code.jquery.com/ui/1.10.3/jquery-ui.js')
+      //PDFObject js plugin
+      script(src='/js/pdfobject.js')
+      //jQuery printPage plugin
+      script(src='/js/printPage.js')
+      //jQuery Form plugin
+      script(src'/js/jquery.form.js')
 
   body
     //
       Top navbar
     .navbar.navbar-inverse.navbar-fixed-top
       .navbar-inner
-        .container-fluid
+        .container
 
           a.brand(href='/') Form Search  
             i.icon-user-md.icon-large
-          .nav-collapse.collapse
+          ul.nav
+            li
+              a(href='/') Search
+            li
+              a(href='upload') Add a Form
+            li
+              a(href='settings') 
+                i.icon-cog 
+                | Settings
+          
+          .nav-collapse.pull-right  
             ul.nav
-              li
-                a(href='/') Search
-              li
-                a(href='upload') Add a Form
-              li
-
-                a(href='settings') 
-                  i.icon-cog  
-                  | Settings
-                  
+              li 
+                a(href='login') Login 
+                            
 
 
     //

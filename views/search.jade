@@ -3,16 +3,18 @@ extends layout
 block content
   #search
     input#omnibox.large(type='text', placeholder = 'Search here')
-  .results
+  .results  
   script(id="template", type="text/x-handlebars-template")
     dl
       {{#each results}}
       dt
         u 
           h3 
-            a(href="view:{{title}}") {{title}}
+            a(href="/view:{{filename}}") {{title}}
       dd
         p.text-warning Institution: {{name}}
       dd  
         p.text-warning City: {{c_name}}
+      dd
+
       {{/each}}

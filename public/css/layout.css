@@ -42,6 +42,10 @@
     .centered-content{
       text-align:center;
     }
+    #pdf.menu
+    {
+      display: inline;
+    }
     .menu {
       display:none;
     }

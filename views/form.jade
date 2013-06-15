@@ -1,9 +1,17 @@
 extends layout
 
 block content
+  //Modal Delete Dialog
+  #myModal.modal.fade(role="dialog", tabindex="-1", aria-labelledby="myModalLabel")
+    .modal-header
+      h3 Delete form confirmation
+    .modal-body Are you sure you want to delete #{doc[0].title} form?
+    .modal-footer
+      #delFinal.btn.btn-primary Yes
+      .btn.btn-danger(data-target="#myModal", data-dismiss="modal") No
   .row
     .span12
-      h1 Form: #{doc[0].title} 
+      h1 #{doc[0].title} 
       u.text-info 
         i
           #detail.showmenu more details 
@@ -31,37 +39,36 @@ block content
       a.btn.btn-primary.print(href="/static/#{doc[0].filename}.pdf") 
         i.icon-print.icon-large
         |  Print
-      a.btn.btn-primary(href="/static/#{doc[0].filename}.pdf") 
-        i.icon-save.icon-large
-        |   Save
-      div.btn.btn-danger
+      button.btn.btn-danger(data-target="#myModal", data-toggle="modal")
         i.icon-remove.icon-large
         |   Delete
-      div#modify.btn.btn-success.showmenu
+
+      b#modify.btn.btn-success.showmenu
         i.icon-wrench.icon-large
         |   Modify &nbsp;&nbsp;&nbsp;
         i.icon-chevron-right
-  form#modify.menu
+
+  form#modify.menu(method="post", action="/api/update")
     legend Modify Form
-
-
     .control-group
-      label.control-label(for='change_name') Current Title: 
+      label.control-label(for='title') Current Title: 
         b
           | #{doc[0].title}
       .controls
         .input-prepend  
           span.add-on New Title
           input#change_name.input-xlarge(form.filename='change_name', placeholder='placeholder', type='text') 
+            |#{doc[0].title}
             p.help Leave empty if you don't want to change
     .control-group
-      label Currently 
-        if doc[0].is_pediatric
-          b is Pediatric (Yes)
-        else if !doc[0].pediatric
-          b is not Pediatric (No)
+      label Currently
+        b 
+          if doc[0].is_pediatric
+           is Pediatric (Yes)
+          else if !doc[0].pediatric
+           is not Pediatric (No)
       label.control-label(for='is_ped') Is it still Pediatric?
-      .controls
+      .controls/
         if doc[0].is_pediatric
           label.radio(for='is_ped-0')
             input#is_ped-0(type='radio', name='is_ped', value='Yes', checked='checked')
@@ -80,7 +87,7 @@ block content
     .control-group
       label Current institution: 
         b #{doc[0].place}
-      label.control-label(for='change_inst') Choose a new institution
+      label.control-label(for='inst') Choose a new institution
       .controls
         select#change_inst.input-xlarge(name='change_inst')
           for place in places
@@ -92,7 +99,7 @@ block content
     .control-group
       label Current reason: 
         b #{doc[0].reason}
-      label.control-label(for='change_inst') Choose a new reason
+      label.control-label(for='reason') Choose a new reason
       .controls
         select#change_inst.input-xlarge(name='change_inst')
           for reason in reasons

@@ -37,11 +37,23 @@
     var forms, query;
 
     forms = [];
-    query = client.query("SELECT r.name AS reason, p.name AS place, c.city AS city, f.title, f.filename, f.is_pediatric\nFROM\nreasons as r, places as p, forms as f, cities as c\nWHERE\nf.reason_id = r.id AND f.place_id = p.id AND p.city_id = c.id AND f.filename =" + name + ";");
+    query = client.query("SELECT r.name AS reason, p.name AS place, c.city AS city, f.title, f.filename, f.is_pediatric\nFROM\nreasons as r, places as p, forms as f, cities as c\nWHERE\nf.reason_id = r.id AND f.place_id = p.id AND p.city_id = c.id AND f.filename = " + name + ";");
     query.on("row", function(row) {
       return forms.push(row);
     });
     return query.on("end", function() {});
+  };
+
+  exports.DelForm = function(title) {
+    var query;
+
+    return query = client.query("DELETE FROM forms WHERE filename = '" + title + "'");
+  };
+
+  exports.UpdateForm = function(form) {
+    var query;
+
+    return query = client.query("INSERT INTO forms (title,is_pediatric,reason_id,place_id) \nVALUES ('" + form.title + "','" + form.is_ped + "'," + form.reason + "," + form.inst + ");");
   };
 
   exports.AddCity = function(new_city) {
@@ -65,7 +77,7 @@
   exports.Upload = function(new_form) {
     var query;
 
-    return query = client.query("INSERT INTO forms (title, is_pediatric, place_id, reason_id, filename) \nVALUES ('" + new_form.title + "', '" + new_form.is_ped + "', " + new_form.pid + ", " + new_form.rid + ", \n" + new_form.filename + ");");
+    return query = client.query("INSERT INTO form (title, is_pediatric, place_id, reason_id) \nVALUES ('" + new_form.title + "', '" + new_form.is_ped + "', " + new_form.pid + ", " + new_form.rid + ");");
   };
 
   exports.Search = function(callback) {

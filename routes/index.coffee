@@ -1,12 +1,9 @@
 #
 # * GET home page.
-# 
-#utils = require("../utils")
 models = require("../models")
-
+fs = require("fs")
 #Template Rendering
 exports.layout = (req, res) ->
-  strng = "hello there"
   res.render "search"
 exports.settings = (req, res) ->
   models.Reason (reasons, places, cities) ->
@@ -33,9 +30,29 @@ exports.view = (req,res) ->
         places: places
          
 #AJAX handling
-exports.modify = (req, res) ->
+exports.update = (req,res) ->
+  form =
+    inst: req.body.inst
+    place: req.body.place
+    reason: req.body.reason
+    title: req.body.title
+  if req.body.ped_t
+    form.is_ped = 't'
+  else if req.body.ped_f
+    form.is_ped = 'f' 
+  models.UpdateForm(form)
 
-exports.set = (req, res) ->s
+exports.delete = (req,res) ->
+  filename = req.query.id+""
+  path = '/static/'+filename+'.pdf'
+  dirname = __dirname.replace "/routes", "" 
+
+  fs.unlinkSync(dirname+path) (err) ->
+    throw err if err
+    models.DelForm(filename)
+  res.redirect "search"
+
+exports.set = (req, res) ->
   place = 
     city_id: req.body.city
     name: req.body.new_inst
@@ -47,6 +64,7 @@ exports.set = (req, res) ->s
 exports.places = (req, res) ->
   models.Reason (reasons,places) ->
     res.send places
+    
 exports.results = (req, res) ->
   models.Search (results) ->		 
     res.send results

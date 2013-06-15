@@ -53,11 +53,13 @@
 
   app.get("/view:id", routes.view);
 
+  app.get("/api/delete", routes["delete"]);
+
   app.get("/api/results", routes.results);
 
   app.get("/api/places", routes.places);
 
-  app.get("/api/modify", routes.modify);
+  app.post("/api/update", routes.update);
 
   app.post("/api/settings", routes.set);
 

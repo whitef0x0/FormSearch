@@ -1,7 +1,7 @@
 #
 # * GET home page.
 # 
-utils = require("../utils")
+#utils = require("../utils")
 models = require("../models")
 
 #Template Rendering
@@ -35,8 +35,7 @@ exports.view = (req,res) ->
 #AJAX handling
 exports.modify = (req, res) ->
 
-
-exports.set = (req, res) ->
+exports.set = (req, res) ->s
   place = 
     city_id: req.body.city
     name: req.body.new_inst
@@ -44,6 +43,7 @@ exports.set = (req, res) ->
   if req.body.new_city then models.AddCity(req.body.new_city)
   if req.body.new_reason then models.AddReason(req.body.new_reason)
   res.redirect "back"
+
 exports.places = (req, res) ->
   models.Reason (reasons,places) ->
     res.send places

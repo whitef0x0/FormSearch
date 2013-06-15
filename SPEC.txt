@@ -47,7 +47,7 @@ CREATE TABLE forms (
   place_id integer,
   is_pediatric boolean,
   id bigserial primary key
-); 
+);
 
 DB Fixture
 ==========

@@ -18,19 +18,19 @@ exports.Reason = (callback) ->
   query.on "row", (row) ->
     places.push row
 
-  query = client.query '''SELECT c.c_name, c.id FROM cities as c'''
+  query = client.query '''SELECT c.city, c.id FROM cities as c'''
   cities = []
   #can stream row results back 1 at a time
   query.on "row", (row) ->
     cities.push row
-
+ 
   #fired after last row is emitted
   query.on "end", ->
     callback(reasons,places,cities)
 
 exports.ViewForm = (name, callback) ->
   forms = []
-  query = client.query """SELECT r.name AS reason, p.name AS place, c.c_name AS city, f.title, f.filename, f.is_pediatric
+  query = client.query """SELECT r.name AS reason, p.name AS place, c.city AS city, f.title, f.filename, f.is_pediatric
     FROM
     reasons as r, places as p, forms as f, cities as c
     WHERE
@@ -41,10 +41,9 @@ exports.ViewForm = (name, callback) ->
     forms.push row
   #console.log form
   query.on "end", ->
-    callback(forms)
 
 exports.AddCity = (new_city) ->
-  query = client.query """INSERT INTO cities (c_name) 
+  query = client.query """INSERT INTO cities (city) 
     VALUES ('#{new_city}');"""
 exports.AddReason = (new_reason) ->
   query = client.query """INSERT INTO reasons (name) 
@@ -60,7 +59,7 @@ exports.Upload = (new_form) ->
     """
 
 exports.Search = (callback) ->
-  query = client.query '''SELECT r.name, p.name, c.c_name, f.title, f.filename, f.is_pediatric
+  query = client.query '''SELECT r.name, p.name, c.city, f.title, f.filename, f.is_pediatric
     FROM
     reasons as r, places as p, forms as f, cities as c
     WHERE

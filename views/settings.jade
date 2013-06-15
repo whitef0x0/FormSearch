@@ -62,8 +62,14 @@ block content
                 select#selectbasic.input-large(name='city', id = 'city')
                   option(value="null") -- Choose a city --
                   for city in cities
-                    option(value=city.id)!=city.c_name
-
+                    option(value=city.id)!=city.city
+          h4 Current Cities
+          ul.unstyled
+            for city in cities
+              li
+                | #{city.city} 
+                a.remove(data-id=city.id)
+                  i.icon.icon-remove
           //
              Button 
           .control-group
@@ -71,6 +77,7 @@ block content
             .controls
               div#city.btn.btn-info.showmenu Add City  
                 i.icon-chevron-right#city
+
 
           div#city.menu
             .control-group
@@ -100,3 +107,11 @@ block content
             label.control-label(for='singlebutton')
             .controls
               input#reason.btn.btn-success(type="submit") Save your settings
+  
+  :coffeescript
+    $('.remove').click ->
+      id = $(this).attr 'data-id'
+      if confirm 'Are you sure?'
+        $.get "/city/#{id}/delete", ->
+          unless rsp.success
+            alert 'deletion failed: ' + rsp.message

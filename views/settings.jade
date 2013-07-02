@@ -1,8 +1,19 @@
 extends layout
 
 block content
-  .row
-    .span2
+
+  //Modal Delete Dialog
+    #del_city_modal.remove.modal.fade(role="dialog", tabindex="-1")
+      .modal-header
+        h3 Delete form confirmation
+      .modal-body Are you sure you want to delete the city: 
+        b city.city
+        |?
+      .modal-footer
+        #del_final.btn.btn-primary Yes
+        .btn.btn-danger(data-target="#del_city_modal", data-dismiss="modal") No
+    .row
+      .span2
 
   form.form-horizontal.settings(action='/api/settings', method='post',enctype='multipart/form-data')
       fieldset
@@ -38,8 +49,6 @@ block content
               .controls
                 input#passwordinput.input-xlarge(name='passwordinput', type='password', placeholder='repeat password')
 
-
-            
           //
              Button 
           .control-group
@@ -63,13 +72,15 @@ block content
                   option(value="null") -- Choose a city --
                   for city in cities
                     option(value=city.id)!=city.city
+
+          //Show a list of all the current cities in DB
           h4 Current Cities
           ul.unstyled
             for city in cities
               li
                 | #{city.city} 
-                a.remove(data-id=city.id)
-                  i.icon.icon-remove
+                a.remove(data-id=city.id, data-target="#del_form", data-toggle="modal")
+                  i.icon.icon-remove.btn(data-target="#myModal", data-toggle="modal")
           //
              Button 
           .control-group
@@ -77,7 +88,6 @@ block content
             .controls
               div#city.btn.btn-info.showmenu Add City  
                 i.icon-chevron-right#city
-
 
           div#city.menu
             .control-group
@@ -95,9 +105,6 @@ block content
                 i.icon-chevron-right#reason
 
           div#reason.menu
-
-            
-            
             .control-group
               label.control-label(for='textinput') Reason Name
               .controls
@@ -108,10 +115,13 @@ block content
             .controls
               input#reason.btn.btn-success(type="submit") Save your settings
   
+
   :coffeescript
-    $('.remove').click ->
+    #Delete city modal dialog event handler
+    $("#del_city").click ->
       id = $(this).attr 'data-id'
-      if confirm 'Are you sure?'
-        $.get "/city/#{id}/delete", ->
-          unless rsp.success
-            alert 'deletion failed: ' + rsp.message
+      $("#del_city > .modal-body > b").html(id)
+      $.get '/api/delete/city/id', {id: id}
+    #Delete city ajax event handler
+    $("#del_city > .modal-footer > #del_final").click ->
+      $.get "/api/delete/city/"+ ($(this).attr 'data-id')

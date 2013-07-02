@@ -13,7 +13,11 @@
     h1 h2 h3 h4 h5 legend {
         font-family: 'Arvo', Georgia, Times, serif;
     }
-
+    .results {
+      display: none;
+      background-color: #9C8AA5;
+      color: black;
+    }
     #omnibox {
       border:1px solid #97B5D2;
       font-family: 'Avro', Helvetica, Arial, sans-serif;
@@ -40,14 +44,14 @@
       margin-top: 25px;
     }
     .centered-content{
-      text-align:center;
+      text-align: center;
     }
     #pdf.menu
     {
       display: inline;
     }
     .menu {
-      display:none;
+      display: none;
     }
     .results{
       list-style-type: none;

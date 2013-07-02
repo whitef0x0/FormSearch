@@ -10,20 +10,19 @@ block content
       dt
         u 
           h3 
-            a(href="/view:{{filename}}") {{title}}
+            a(href="/view/{{filename}}") {{title}}
       dd
-        p.text-warning Institution: {{name}}
+        p Institution: {{name}}
       dd  
-        p.text-warning City: {{city}}
+        p City: {{city}}
       dd
       {{/each}}
 
   :coffeescript
-
+    results = {}
     #/api/results event handler and filtering
     $("#omnibox").keyup (e) ->
       key = e.keyCode || e.which
-
       terms = $(@).val().trim().split(" ")
       out_results = []
 
@@ -34,7 +33,7 @@ block content
           term = term.toLowerCase()
           if result.name.toLowerCase().indexOf(term) > -1 
             result.score += 1
-          if result.c_name.toLowerCase().indexOf(term) > -1 
+          if result.city.toLowerCase().indexOf(term) > -1 
             result.score += 1
           if result.title.toLowerCase().indexOf(term) > -1 
             result.score += 1
@@ -63,5 +62,5 @@ block content
         $(".results").css("background-color","B1DCFE");
         $(".results").html(html)
 
-      $.get '/api/results', (rsp)->
-        results = rsp
+    $.get '/api/results', (rsp)->
+      results = rsp

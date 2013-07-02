@@ -51,9 +51,9 @@
 
   app.get("/settings", routes.settings);
 
-  app.get("/view:id", routes.view);
+  app.get("/view/:id", routes.view);
 
-  app.get("/api/delete", routes["delete"]);
+  app.get("/api/delete/:type/:id", routes["delete"]);
 
   app.get("/api/results", routes.results);
 
@@ -63,34 +63,7 @@
 
   app.post("/api/settings", routes.set);
 
-  app.post("/api/upload", function(req, res) {
-    var form, hash, string;
-
-    string = req.body.title + "";
-    hash = string.hashCode();
-    form = {
-      title: req.body.title,
-      pid: req.body.institution,
-      rid: req.body.reason,
-      is_ped: '',
-      filename: hash
-    };
-    console.log(form.filename);
-    if (req.body.ped_t) {
-      form.is_ped = 't';
-    } else if (req.body.ped_f) {
-      form.is_ped = 'f';
-    }
-    return fs.readFile(req.files.displayForm.path, function(err, data) {
-      var newPath;
-
-      newPath = __dirname + "/static/" + hash + ".pdf";
-      return fs.writeFile(newPath, data, function(err) {
-        models.Upload(form);
-        return res.redirect("success");
-      });
-    });
-  });
+  app.post("/api/upload", routes.view_upload);
 
   http.createServer(app).listen(app.get("port"), "0.0.0.0", function() {
     return console.log("Express server listening on port " + app.get("port"));

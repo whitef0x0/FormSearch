@@ -2,21 +2,21 @@ extends layout
 
 block content
   //Modal Delete Dialog
-  #myModal.modal.fade(role="dialog", tabindex="-1", aria-labelledby="myModalLabel")
+  #del_form.modal.fade(role="dialog", tabindex="-1", aria-labelledby="myModalLabel")
     .modal-header
       h3 Delete form confirmation
     .modal-body Are you sure you want to delete #{doc[0].title} form?
     .modal-footer
-      #delFinal.btn.btn-primary Yes
-      .btn.btn-danger(data-target="#myModal", data-dismiss="modal") No
+      #del_final.btn.btn-primary Yes
+      .btn.btn-danger(data-target="#del_form", data-dismiss="modal") No
   .row
     .span12
       h1 #{doc[0].title} 
       u.text-info 
-        i
-          #detail.showmenu more details 
-            i.icon-chevron-right
-  #detail.menu.row
+        //#detail.showmenu more details 
+          i.icon-chevron-right
+  ///#detail.menu
+  .row
     .row-fixed
       em
         .span3 Institution:
@@ -39,11 +39,11 @@ block content
       a.btn.btn-primary.print(href="/static/#{doc[0].filename}.pdf") 
         i.icon-print.icon-large
         |  Print
-      button.btn.btn-danger(data-target="#myModal", data-toggle="modal")
+      button.btn.btn-danger(data-target="#del_form", data-toggle="modal")
         i.icon-remove.icon-large
         |   Delete
 
-      b#modify.btn.btn-success.showmenu
+      //b#modify.btn.btn-success.showmenu
         i.icon-wrench.icon-large
         |   Modify &nbsp;&nbsp;&nbsp;
         i.icon-chevron-right
@@ -121,3 +121,10 @@ block content
           a(href="/static/#{doc[0].filename}.pdf")
             | click here to
             | download the PDF file
+
+  :coffeescript
+    #Modal Dialog Delete event handler
+    $("#delFinal").click ->
+      id = location.pathname.replace("/view/","")
+      console.log id
+      $.get path.join '/api/delete/form/', id

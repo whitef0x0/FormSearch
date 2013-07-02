@@ -28,42 +28,53 @@ exports.Reason = (callback) ->
   query.on "end", ->
     callback(reasons,places,cities)
 
-exports.ViewForm = (name, callback) ->
-  forms = []
-  query = client.query """SELECT r.name AS reason, p.name AS place, c.city AS city, f.title, f.filename, f.is_pediatric
-    FROM
-    reasons as r, places as p, forms as f, cities as c
-    WHERE
-    f.reason_id = r.id AND f.place_id = p.id AND p.city_id = c.id AND f.filename = #{name};
-    """
-  query.on "row", (row) ->
-    forms.push row
+class Form
+  @view: (name, callback) ->
+    forms = []
+    query = client.query """SELECT r.name AS reason, p.name AS place, c.city AS city, f.title, f.filename, f.is_pediatric
+      FROM
+      reasons as r, places as p, forms as f, cities as c
+      WHERE
+      f.reason_id = r.id AND f.place_id = p.id AND p.city_id = c.id AND f.filename = '#{name}';
+      """
+    query.on "row", (row) ->
+      forms.push row
 
-  query.on "end", ->
+    query.on "end", ->
+      callback(forms)
+  @add = (new_form) ->
+    query = client.query """INSERT INTO forms (title, is_pediatric, place_id, reason_id, filename) 
+      VALUES ('#{new_form.title}', '#{new_form.is_ped}', #{new_form.pid}, #{new_form.rid}, '#{new_form.filename}');
+      """
 
-exports.DelForm = (title) ->
-  query = client.query """DELETE FROM forms WHERE filename = '#{title}'"""
+  @del: (title) ->
+    query = client.query 
 
-exports.UpdateForm = (form) ->
-  query = client.query """INSERT INTO forms (title,is_pediatric,reason_id,place_id) 
-    VALUES ('#{form.title}','#{form.is_ped}',#{form.reason},#{form.inst});"""
+  @update: (form) ->
+    query = client.query """UPDATE forms(title,is_pediatric,reason_id,place_id) 
+      VALUES ('#{form.title}','#{form.is_ped}',#{form.reason},#{form.inst})  WHERE forms.id = form.id;"""
 
-exports.AddCity = (new_city) ->
-  query = client.query """INSERT INTO cities (city) 
-    VALUES ('#{new_city}');"""
+exports.Form = Form
 
-exports.AddReason = (new_reason) ->
-  query = client.query """INSERT INTO reasons (name) 
-    VALUES ('#{new_reason}');"""
+class City
+  @add: (new_city) ->
+    query = client.query """INSERT INTO cities (city) 
+      VALUES ('#{new_city}');"""
+  @add: (id) ->
+    query = client.query """DELETE FROM city WHERE 
+    id = #{id}"""
 
-exports.AddInst = (new_place) ->
-  query = client.query """INSERT INTO places (name, city_id) 
-    VALUES ('#{new_place.name}', #{new_place.city_id});"""
+exports.City = City
 
-exports.Upload = (new_form) ->
-  query = client.query """INSERT INTO form (title, is_pediatric, place_id, reason_id) 
-    VALUES ('#{new_form.title}', '#{new_form.is_ped}', #{new_form.pid}, #{new_form.rid});
-    """
+class Reason
+  @add: (new_reason) ->
+    query = client.query """INSERT INTO reasons (name) 
+      VALUES ('#{new_reason}');"""
+
+class Institution
+  @add: (new_place) ->
+    query = client.query """INSERT INTO places (name, city_id) 
+      VALUES ('#{new_place.name}', #{new_place.city_id});"""
 
 exports.Search = (callback) ->
   query = client.query '''SELECT r.name, p.name, c.city, f.title, f.filename, f.is_pediatric

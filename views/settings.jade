@@ -22,32 +22,33 @@ block content
           legend Settings 
             i.icon-cog.icon-large
           //
-             Button 
-          .control-group
-            label.control-label(for='singlebutton')
-            .controls
-              div#accnt.btn.btn-inverse.showmenu Manage Account    
-                i.icon-chevron-right
-          div#accnt.menu
-            
+             Button
+          //
             .control-group
-              label.control-label(for='email') Email
+              label.control-label(for='singlebutton')
               .controls
-                input#email.input-xlarge(name='email', type='text', placeholder='joe@example.com')
-                p.help-block this will be your username
-            //
-               Password input
-            .control-group
-              label.control-label(for='passwordinput') Password
-              .controls
-                input#passwordinput.input-xlarge(name='passwordinput', type='password', placeholder='')
-                p.help-block must be at least 7 characters long
-            //
-               Password input
-            .control-group
-              label.control-label(for='passwordinput')
-              .controls
-                input#passwordinput.input-xlarge(name='passwordinput', type='password', placeholder='repeat password')
+                #accnt.btn.btn-inverse.showmenu Manage Account    
+                  i.icon-chevron-right
+            #accnt.menu
+              
+              .control-group
+                label.control-label(for='email') Email
+                .controls
+                  input#email.input-xlarge(name='email', type='text', placeholder='joe@example.com')
+                  p.help-block this will be your username
+              //
+                 Password input
+              .control-group
+                label.control-label(for='passwordinput') Password
+                .controls
+                  input#passwordinput.input-xlarge(name='passwordinput', type='password', placeholder='')
+                  p.help-block must be at least 7 characters long
+              //
+                 Password input
+              .control-group
+                label.control-label(for='passwordinput')
+                .controls
+                  input#passwordinput.input-xlarge(name='passwordinput', type='password', placeholder='repeat password')
 
           //
              Button 

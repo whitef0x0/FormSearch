@@ -127,5 +127,4 @@ block content
     $("#del_final").click ->
       id = location.pathname.replace("/view/","")
       $.get '/api/delete/form/'+ id
-      alert 'deleted'
       window.location = '/'

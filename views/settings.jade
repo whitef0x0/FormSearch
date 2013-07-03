@@ -3,17 +3,17 @@ extends layout
 block content
 
   //Modal Delete Dialog
-    #del_city_modal.remove.modal.fade(role="dialog", tabindex="-1")
-      .modal-header
-        h3 Delete form confirmation
-      .modal-body Are you sure you want to delete the city: 
-        b city.city
-        |?
-      .modal-footer
-        #del_final.btn.btn-primary Yes
-        .btn.btn-danger(data-target="#del_city_modal", data-dismiss="modal") No
-    .row
-      .span2
+  #del_modal.remove.modal.fade(role="dialog", tabindex="-1")
+    .modal-header
+      h3 Delete form confirmation
+    .modal-body Are you sure you want to delete the city: 
+      b city.city
+      |?
+    .modal-footer
+      #del_final.btn.btn-primary Yes
+      .btn.btn-danger(data-target="#del_modal", data-dismiss="modal") No
+  .row
+    .span2
 
   form.form-horizontal.settings(action='/api/settings', method='post',enctype='multipart/form-data')
       fieldset
@@ -46,9 +46,16 @@ block content
                 label.control-label(for='passwordinput')
                 .controls
                   input#passwordinput.input-xlarge(name='passwordinput', type='password', placeholder='repeat password')
+          
+          //Show a list of all the current Institutions in DB
+          h4 Current Institutions
+          ul.unstyled
+            for institution in places
+              li
+                | #{institution.name} 
+                a.remove(data-id=institution.id, data-type='institution', data-target="#del_form", data-toggle="modal")
+                  i.icon.icon-remove.btn(data-target="#myModal", data-toggle="modal")
 
-          //
-             Button 
           .control-group
             label.control-label(for='singlebutton')
             .controls
@@ -77,7 +84,7 @@ block content
             for city in cities
               li
                 | #{city.city} 
-                a.remove(data-id=city.id, data-target="#del_form", data-toggle="modal")
+                a.remove(data-id=city.id, data-type='city', data-target="#del_form", data-toggle="modal")
                   i.icon.icon-remove.btn(data-target="#myModal", data-toggle="modal")
           //
              Button 
@@ -93,6 +100,14 @@ block content
               .controls
                 input#textinput.input-xlarge(name='new_city', type='text', placeholder='e.g. Vancouver')
                 p.help-block do not use any abbreviations 
+
+          h4 Current Reasons
+          ul.unstyled
+            for reason in reasons
+              li
+                | #{reason.name} 
+                a.remove(data-id=reason.id, data-type='reason', data-target="#del_form", data-toggle="modal")
+                  i.icon.icon-remove.btn(data-target="#myModal", data-toggle="modal")
 
           //
              Button 
@@ -116,10 +131,12 @@ block content
 
   :coffeescript
     #Delete city modal dialog event handler
-    $("#del_city").click ->
+    $(".remove").click ->
       id = $(this).attr 'data-id'
-      $("#del_city > .modal-body > b").html(id)
-      $.get '/api/delete/city/id', {id: id}
+      type = $(this).attr 'data-type'
+      #$("#del_city > .modal-body > b").html(id)
+      $.get "/api/delete/#{type}/#{id}"
+
     #Delete city ajax event handler
-    $("#del_city > .modal-footer > #del_final").click ->
+    $(".modal-footer > #del_final").click ->
       $.get "/api/delete/city/"+ ($(this).attr 'data-id')

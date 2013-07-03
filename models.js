@@ -10,29 +10,6 @@
 
   client.connect();
 
-  exports.Reason = function(callback) {
-    var cities, places, query, reasons;
-
-    query = client.query('SELECT r.name, r.id FROM reasons as r');
-    reasons = [];
-    query.on("row", function(row) {
-      return reasons.push(row);
-    });
-    query = client.query('SELECT p.name, p.city_id, p.id FROM places as p');
-    places = [];
-    query.on("row", function(row) {
-      return places.push(row);
-    });
-    query = client.query('SELECT c.city, c.id FROM cities as c');
-    cities = [];
-    query.on("row", function(row) {
-      return cities.push(row);
-    });
-    return query.on("end", function() {
-      return callback(reasons, places, cities);
-    });
-  };
-
   Form = (function() {
     function Form() {}
 
@@ -95,10 +72,10 @@
       return query = client.query("INSERT INTO cities (city) \nVALUES ('" + new_city + "');");
     };
 
-    City.add = function(id) {
+    City.del = function(id) {
       var query;
 
-      return query = client.query("DELETE FROM city WHERE \nid = " + id);
+      return query = client.query("DELETE FROM cities WHERE \nid = " + id);
     };
 
     return City;
@@ -116,9 +93,40 @@
       return query = client.query("INSERT INTO reasons (name) \nVALUES ('" + new_reason + "');");
     };
 
+    Reason.del = function(id) {
+      var query;
+
+      return query = client.query("DELETE FROM reasons WHERE \nid = " + id);
+    };
+
     return Reason;
 
   })();
+
+  exports.Reason = Reason;
+
+  exports.GetAll = function(callback) {
+    var cities, places, query, reasons;
+
+    query = client.query('SELECT r.name, r.id FROM reasons as r');
+    reasons = [];
+    query.on("row", function(row) {
+      return reasons.push(row);
+    });
+    query = client.query('SELECT p.name, p.city_id, p.id FROM places as p');
+    places = [];
+    query.on("row", function(row) {
+      return places.push(row);
+    });
+    query = client.query('SELECT c.city, c.id FROM cities as c');
+    cities = [];
+    query.on("row", function(row) {
+      return cities.push(row);
+    });
+    return query.on("end", function() {
+      return callback(reasons, places, cities);
+    });
+  };
 
   Institution = (function() {
     function Institution() {}
@@ -132,6 +140,8 @@
     return Institution;
 
   })();
+
+  exports.Institution = Institution;
 
   exports.Search = function(callback) {
     var query, results;

@@ -15,7 +15,7 @@
   };
 
   exports.settings = function(req, res) {
-    return models.Reason(function(reasons, places, cities) {
+    return models.GetAll(function(reasons, places, cities) {
       return res.render("settings", {
         places: places,
         cities: cities,
@@ -25,7 +25,7 @@
   };
 
   exports.upload = function(req, res) {
-    return models.Reason(function(reasons, places, cities) {
+    return models.GetAll(function(reasons, places, cities) {
       return res.render("upload", {
         reasons: reasons,
         places: places,
@@ -64,7 +64,7 @@
     };
     filename = req.params.id.trim() + "";
     return models.Form.view(req.params.id, function(forms) {
-      return models.Reason(function(reasons, places) {
+      return models.GetAll(function(reasons, places) {
         return res.render("form", {
           doc: forms,
           reasons: reasons,
@@ -111,14 +111,20 @@
     var filename, location;
 
     if (req.params.type === 'form') {
-      filename = req.query.id + "";
+      filename = req.params.id + "";
       location = path.join(__dirname, '../static/', filename + '.pdf');
       return fs.unlink(location, function(err) {
         models.Form.del(req.params.id);
         return res.redirect("/");
       });
     } else if (req.params.type === 'city') {
-      models.City.del(req.query.id);
+      models.City.del(req.params.id);
+      return res.redirect("/");
+    } else if (req.params.type === 'reason') {
+      models.Reason.del(req.params.id);
+      return res.redirect("/");
+    } else if (req.params.type === 'institution') {
+      models.Institution.del(req.params.id);
       return res.redirect("/");
     }
   };
@@ -126,24 +132,25 @@
   exports.set = function(req, res) {
     var place;
 
+    console.log('la');
     place = {
       city_id: req.body.city,
       name: req.body.new_inst
     };
     if (place.name) {
-      models.AddInst(place);
+      models.Institution.add(place);
     }
     if (req.body.new_city) {
       models.City.add(req.body.new_city);
     }
     if (req.body.new_reason) {
-      models.AddReason(req.body.new_reason);
+      models.Reason.add(req.body.new_reason);
     }
     return res.redirect("back");
   };
 
   exports.places = function(req, res) {
-    return models.Reason(function(reasons, places) {
+    return models.GetAll(function(reasons, places) {
       return res.send(places);
     });
   };

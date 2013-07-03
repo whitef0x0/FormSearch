@@ -8,18 +8,21 @@ path = require 'path'
 #Template Rendering
 exports.layout = (req, res) ->
   res.render "search"
+
 exports.settings = (req, res) ->
-  models.Reason (reasons, places, cities) ->
+  models.GetAll (reasons, places, cities) ->
     res.render "settings",
       places: places
       cities: cities
       reasons: reasons
+
 exports.upload = (req, res) -> 
-  models.Reason (reasons, places, cities) ->
+  models.GetAll (reasons, places, cities) ->
     res.render "upload", 
       reasons: reasons
       places: places
       cities: cities
+
 exports.success = (req,res) ->
 	res.render "success"    
 
@@ -37,7 +40,7 @@ exports.view = (req,res) ->
   String.prototype.trim = -> @replace ':', '' 
   filename = req.params.id.trim()+""
   models.Form.view req.params.id, (forms) ->
-    models.Reason (reasons, places) ->
+    models.GetAll (reasons, places) ->
       res.render "form",
         doc: forms
         reasons: reasons
@@ -73,7 +76,7 @@ exports.update = (req, res) ->
 
 exports.delete = (req,res) ->
   if req.params.type is 'form'
-    filename = req.query.id+""
+    filename = req.params.id+""
     location = path.join __dirname, '../static/', filename+'.pdf'
 
     fs.unlink location, (err) ->
@@ -81,20 +84,27 @@ exports.delete = (req,res) ->
       models.Form.del(req.params.id)
       res.redirect "/"
   else if req.params.type is 'city'
-    models.City.del(req.query.id)
+    models.City.del(req.params.id)
+    res.redirect "/"
+  else if req.params.type is 'reason'
+    models.Reason.del(req.params.id)
+    res.redirect "/"
+  else if req.params.type is 'institution'
+    models.Institution.del(req.params.id)
     res.redirect "/"
 
 exports.set = (req, res) ->
+  console.log 'la'
   place = 
     city_id: req.body.city
     name: req.body.new_inst
-  if place.name then models.AddInst(place)
+  if place.name then models.Institution.add(place)
   if req.body.new_city then models.City.add(req.body.new_city)
-  if req.body.new_reason then models.AddReason(req.body.new_reason)
+  if req.body.new_reason then models.Reason.add(req.body.new_reason)
   res.redirect "back"
 
 exports.places = (req, res) ->
-  models.Reason (reasons,places) ->
+  models.GetAll (reasons,places) ->
     res.send places
 
 exports.results = (req, res) ->

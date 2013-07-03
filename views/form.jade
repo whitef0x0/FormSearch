@@ -124,7 +124,8 @@ block content
 
   :coffeescript
     #Modal Dialog Delete event handler
-    $("#delFinal").click ->
+    $("#del_final").click ->
       id = location.pathname.replace("/view/","")
-      console.log id
-      $.get path.join '/api/delete/form/', id
+      $.get '/api/delete/form/'+ id
+      alert 'deleted'
+      window.location = '/'

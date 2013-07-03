@@ -4,19 +4,25 @@ block content
   #search
     input#omnibox.large(type='text', placeholder = 'Search here')
   .results  
-  script(id="template", type="text/x-handlebars-template")
-    dl
+  script#template(type='text/x-handlebars-template')
+      <dl>
       {{#each results}}
-      dt
-        u 
-          h3 
-            a(href="/view/{{filename}}") {{title}}
-      dd
-        p Institution: {{name}}
-      dd  
-        p City: {{city}}
-      dd
+      <dt>
+      <u>
+      <h3>
+      <a href="/view/{{filename}}"> {{title}} </a>
+      </h3>
+      </u>
+      </dt>
+      <dd>
+      <p> Institution: {{name}} </p>
+      </dd>
+      <dd>
+      <p> City: {{city}} </p>
+      </dd>
       {{/each}}
+      </dl>
+  
 
   :coffeescript
     results = {}

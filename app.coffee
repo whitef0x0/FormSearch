@@ -45,4 +45,3 @@ app.post "/api/upload", routes.view_upload
 http.createServer(app).listen app.get("port"),"0.0.0.0", ->
   console.log "Express server listening on port " + app.get("port")
 
-

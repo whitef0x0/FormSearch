@@ -22,15 +22,27 @@ exports.upload = (req, res) ->
       cities: cities
 exports.success = (req,res) ->
 	res.render "success"    
-exports.view = (req,res) ->
+
+exports.list = (req,res) ->
   String.prototype.trim = -> @replace ':', '' 
   filename = req.params.id.trim()+""
-  models.Form.view filename, (forms) ->
+  models.Form.list (forms) ->
     models.Reason (reasons, places) ->
       res.render "form",
         doc: forms
         reasons: reasons
         places: places
+
+exports.view = (req,res) ->
+  String.prototype.trim = -> @replace ':', '' 
+  filename = req.params.id.trim()+""
+  models.Form.view req.params.id, (forms) ->
+    models.Reason (reasons, places) ->
+      res.render "form",
+        doc: forms
+        reasons: reasons
+        places: places
+
 
 #AJAX handling 
 exports.view_upload = (req,res) ->
@@ -65,8 +77,8 @@ exports.delete = (req,res) ->
     location = path.join __dirname, '../static/', filename+'.pdf'
 
     fs.unlink location, (err) ->
-      throw err if err
-      models.Form.del(filename)
+      #throw err if err
+      models.Form.del(req.params.id)
       res.redirect "/"
   else if req.params.type is 'city'
     models.City.del(req.query.id)

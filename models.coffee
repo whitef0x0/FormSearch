@@ -29,6 +29,20 @@ exports.Reason = (callback) ->
     callback(reasons,places,cities)
 
 class Form
+  @list: (callback) ->
+    forms = []
+    query = client.query """SELECT r.name AS reason, p.name AS place, c.city AS city, f.title, f.filename, f.is_pediatric
+      FROM
+      reasons as r, places as p, forms as f, cities as c
+      WHERE
+      f.reason_id = r.id AND f.place_id = p.id AND p.city_id = c.id;
+      """
+    query.on "row", (row) ->
+      forms.push row
+
+    query.on "end", ->
+      callback(forms)
+
   @view: (name, callback) ->
     forms = []
     query = client.query """SELECT r.name AS reason, p.name AS place, c.city AS city, f.title, f.filename, f.is_pediatric
@@ -42,13 +56,14 @@ class Form
 
     query.on "end", ->
       callback(forms)
+
   @add = (new_form) ->
     query = client.query """INSERT INTO forms (title, is_pediatric, place_id, reason_id, filename) 
       VALUES ('#{new_form.title}', '#{new_form.is_ped}', #{new_form.pid}, #{new_form.rid}, '#{new_form.filename}');
       """
 
-  @del: (title) ->
-    query = client.query 
+  @del: (id) ->
+    query = client.query """DELETE FROM forms WHERE filename='#{id}';"""
 
   @update: (form) ->
     query = client.query """UPDATE forms(title,is_pediatric,reason_id,place_id) 

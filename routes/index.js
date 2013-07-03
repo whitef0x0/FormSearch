@@ -38,6 +38,24 @@
     return res.render("success");
   };
 
+  exports.list = function(req, res) {
+    var filename;
+
+    String.prototype.trim = function() {
+      return this.replace(':', '');
+    };
+    filename = req.params.id.trim() + "";
+    return models.Form.list(function(forms) {
+      return models.Reason(function(reasons, places) {
+        return res.render("form", {
+          doc: forms,
+          reasons: reasons,
+          places: places
+        });
+      });
+    });
+  };
+
   exports.view = function(req, res) {
     var filename;
 
@@ -45,7 +63,7 @@
       return this.replace(':', '');
     };
     filename = req.params.id.trim() + "";
-    return models.Form.view(filename, function(forms) {
+    return models.Form.view(req.params.id, function(forms) {
       return models.Reason(function(reasons, places) {
         return res.render("form", {
           doc: forms,
@@ -96,10 +114,7 @@
       filename = req.query.id + "";
       location = path.join(__dirname, '../static/', filename + '.pdf');
       return fs.unlink(location, function(err) {
-        if (err) {
-          throw err;
-        }
-        models.Form.del(filename);
+        models.Form.del(req.params.id);
         return res.redirect("/");
       });
     } else if (req.params.type === 'city') {
